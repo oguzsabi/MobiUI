@@ -285,7 +285,6 @@ public class Calculator {
                 totalDistanceDuration[0] += distanceDuration[0];
                 totalDistanceDuration[1] += distanceDuration[1];
                 vardiya.setVardiyaBitisVarisSuresi((int)Math.round(distanceDuration[1]));
-                System.out.println("Vardiya bitis " + (vardiya) + " varis suresi: " + (int)Math.round(distanceDuration[1]));
             }
         }
 
@@ -365,12 +364,6 @@ public class Calculator {
             secondDurakIndex++;
 
         return new int[]{firstDurakIndex, secondDurakIndex};
-    }
-
-    public static int[] findDuraksFirstFeasibleIndex(ObservableList<DraggableListItem> observableList, Durak[] duraklar) {
-        ArrayList<Durak> newDuraklar = new ArrayList<>(Arrays.asList(duraklar));
-
-        return new int[]{1, 2};
     }
 
     public static int calculateDuration(double distance) {

@@ -26,9 +26,8 @@
           </Menu>
             <Menu mnemonicParsing="false" text="Options">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Close" />
-                  <MenuItem mnemonicParsing="false" text="Close" />
                   <CheckMenuItem fx:id="optimalPaketEkleme" mnemonicParsing="false" text="Optimal Paket Ekleme" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Legend">
