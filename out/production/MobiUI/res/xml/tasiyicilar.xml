@@ -1,0 +1,44 @@
+<root>
+    <tasiyici refTasiyici="1" DurumX="26.991283" DurumY="38.448712">
+        <vardiya saatBaslangic="12:30" saatBitis="17:00" BaslangicX="27.191283" BaslangicY="38.588712" BitisX="27.101033" BitisY="38.600712">
+            <durak refGonderi="1" X="26.939925" Y="38.554433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="1" X="27.092784" Y="38.479801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="2" X="26.919925" Y="38.554433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="2" X="27.192784" Y="38.479801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+        <vardiya saatBaslangic="17:32" saatBitis="18:10" BaslangicX="26.971283" BaslangicY="38.348712" BitisX="27.100003" BitisY="38.539712">
+            <durak refGonderi="3" X="26.939925" Y="38.604433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="3" X="27.112784" Y="38.439809" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="4" X="26.961125" Y="38.534433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="4" X="26.899984" Y="38.429801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+    </tasiyici>
+    <tasiyici refTasiyici="2" DurumX="26.913987" DurumY="38.538172">
+        <vardiya saatBaslangic="12:00" saatBitis="14:00" BaslangicX="27.001283" BaslangicY="38.438712" BitisX="27.001033" BitisY="38.583712">
+            <durak refGonderi="5" X="26.945925" Y="38.514433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="5" X="27.083989" Y="38.439801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="6" X="26.931184" Y="38.534433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="6" X="27.092987" Y="38.459801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+        <vardiya saatBaslangic="14:32" saatBitis="18:10" BaslangicX="26.931283" BaslangicY="38.393792" BitisX="27.191933" BitisY="38.531712">
+            <durak refGonderi="7" X="26.939925" Y="38.514433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="7" X="27.112784" Y="38.479809" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="8" X="26.961125" Y="38.384433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="8" X="26.899984" Y="38.411199" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+    </tasiyici>
+    <tasiyici refTasiyici="3" DurumX="26.971127" DurumY="38.398172">
+        <vardiya saatBaslangic="12:00" saatBitis="14:00" BaslangicX="27.101283" BaslangicY="38.438712" BitisX="27.001033" BitisY="38.583712">
+            <durak refGonderi="9" X="26.985925" Y="38.554433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="9" X="27.183989" Y="38.479801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="10" X="26.931855" Y="38.554433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="10" X="27.012345" Y="38.479801" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+        <vardiya saatBaslangic="17:30" saatBitis="18:50" BaslangicX="26.941000" BaslangicY="38.434343" BitisX="27.166633" BitisY="38.449999">
+            <durak refGonderi="11" X="26.930099" Y="38.514433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="11" X="27.112233" Y="38.479809" varisSuresi="120" Ucret="6" Teslimat="1"/>
+            <durak refGonderi="12" X="26.932156" Y="38.384433" varisSuresi="120" Ucret="6" Teslimat="0"/>
+            <durak refGonderi="12" X="27.101101" Y="38.411233" varisSuresi="120" Ucret="6" Teslimat="1"/>
+        </vardiya>
+    </tasiyici>
+</root>

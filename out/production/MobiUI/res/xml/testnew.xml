@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<root>
+    <rota refTasiyici="2" rotaid="28953" ekstraZaman="370" ekstraKM="210.133424" ekstraDurak="10" ekstraKazanc="4.000000">
+        <durak id="52181" varisSaati="16:44" slackTime="66" teslimAlinacakSayi="1" teslimEdilecekSayi="0">
+            <gonderi refGonderi="160"/>
+        </durak>
+        <durak id="47810" varisSaati="17:15" slackTime="66" teslimAlinacakSayi="0" teslimEdilecekSayi="1">
+            <gonderi refGonderi="160"/>
+        </durak>
+        <durak id="29993" varisSaati="18:03" slackTime="66" teslimAlinacakSayi="1" teslimEdilecekSayi="0">
+            <gonderi refGonderi="159"/>
+        </durak>
+        <durak id="8812" varisSaati="18:47" slackTime="66" teslimAlinacakSayi="0" teslimEdilecekSayi="1">
+            <gonderi refGonderi="159"/>
+        </durak>
+        <durak id="22983" varisSaati="19:30" slackTime="66" teslimAlinacakSayi="1" teslimEdilecekSayi="0">
+            <gonderi refGonderi="163"/></durak>
+        <durak id="34483" varisSaati="20:04" slackTime="66" teslimAlinacakSayi="0" teslimEdilecekSayi="1">
+            <gonderi refGonderi="163"/>
+        </durak><durak id="40642" varisSaati="20:23" slackTime="66" teslimAlinacakSayi="1" teslimEdilecekSayi="0">
+            <gonderi refGonderi="162"/>
+        </durak>
+        <durak id="41988" varisSaati="20:42" slackTime="66" teslimAlinacakSayi="0" teslimEdilecekSayi="1">
+            <gonderi refGonderi="162"/>
+        </durak>
+        <durak id="18609" varisSaati="21:17" slackTime="66" teslimAlinacakSayi="1" teslimEdilecekSayi="0">
+            <gonderi refGonderi="161"/>
+        </durak>
+        <durak id="11864" varisSaati="21:51" slackTime="66" teslimAlinacakSayi="0" teslimEdilecekSayi="1">
+            <gonderi refGonderi="161"/>
+        </durak>
+    </rota>
+</root>
