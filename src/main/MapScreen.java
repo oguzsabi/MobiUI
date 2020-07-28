@@ -457,14 +457,14 @@ public class MapScreen implements Initializable {
         Paket paket = (Paket) selectedShape.getUserData();
 
         if (isTasiyiciSelected) {
-            if (!isShapeSelectedBefore(selectedShape)) {
+            if (isShapeNotSelectedBefore(selectedShape)) {
 //                selectedShapes.add((Shape)t.getSource());
                 vardiyaKaydet.setDisable(false);
                 convertPaketToDuraklar(paket);
                 drawNewRouteArrows();
             }
         } else {
-            if (!isShapeSelectedBefore(selectedShape)) {
+            if (isShapeNotSelectedBefore(selectedShape)) {
                 paket.arrow.setStroke(Color.BLUE);
                 paket.arrow.setArrowHeadStroke(Color.BLUE);
                 selectedShapes.add(selectedShape);
@@ -491,7 +491,7 @@ public class MapScreen implements Initializable {
             durak.arrow.setStroke((Color)selectedTasiyici.tasiyiciLoc.getFill());
             durak.arrow.setArrowHeadStroke((Color)selectedTasiyici.tasiyiciLoc.getFill());
         }
-        if (!isTasiyiciSelected && !isShapeSelectedBefore(selectedShape)) {
+        if (!isTasiyiciSelected && isShapeNotSelectedBefore(selectedShape)) {
             selectedShapes.add(selectedShape);
             addToListView(-1, durak, rotaInfo);
         }
@@ -771,11 +771,10 @@ public class MapScreen implements Initializable {
             addToListView(durakIndexes[0], duraklar[0], rotaInfo);
             addToListView(durakIndexes[1], duraklar[1], rotaInfo);
         } else {
-            addToListView(-1, duraklar[0], rotaInfo);
-            addToListView(-1, duraklar[1], rotaInfo);
+            int index = findDuraksFirstFeasibleIndex(duraklar);
+            addToListView(index, duraklar[0], rotaInfo);
+            addToListView(index + 1, duraklar[1], rotaInfo);
         }
-
-        Calculator.findDuraksFirstFeasibleIndex(rotaInfoList, duraklar);
 
         selectedTasiyici.setEkstraDurak(selectedTasiyici.getEkstraDurak() + 2);
         ekstraDurakLabel.setText(Integer.toString(selectedTasiyici.getEkstraDurak()));
@@ -992,14 +991,30 @@ public class MapScreen implements Initializable {
         }
     }
 
+    private int findDuraksFirstFeasibleIndex(Durak[] duraklar) {
+        for (int i = 2; i < rotaInfoList.size(); i++) {
+            addToListView(i, duraklar[0], rotaInfo);
+            addToListView(i + 1, duraklar[1], rotaInfo);
+            changeVardiyaAndDurakOrder();
+            updateVarisSureleri();
+            if (isRouteFeasible()) {
+                rotaInfoList.remove(i);
+                rotaInfoList.remove(i);
+                return i;
+            }
+            rotaInfoList.remove(i);
+            rotaInfoList.remove(i);
+        }
+
+        return rotaInfoList.size();
+    }
+
     private boolean isRouteFeasible() {
         if (selectedTasiyici != null) {
             ArrayList<Vardiya> vardiyalar = selectedTasiyici.getVardiyalar();
 
             for (Vardiya vardiya: vardiyalar) {
-                int vardiyaBaslangic = vardiya.getSaatBaslangicInSeconds();
-                int vardiyaBitis = vardiya.getSaatBitisInSeconds();
-                int vardiyaSuresi = vardiyaBitis - vardiyaBaslangic;
+                int vardiyaSuresi = vardiya.getSaatBitisInSeconds() - vardiya.getSaatBaslangicInSeconds();
                 int durakToplamSure = vardiya.getVardiyaBitisVarisSuresi() * 60;
 
                 for (Durak durak: vardiya.getDuraklar()) {
@@ -1010,14 +1025,12 @@ public class MapScreen implements Initializable {
                     return false;
                 }
             }
-
             return true;
         }
-
         return false;
     }
 
-    private boolean isShapeSelectedBefore(Shape s) {
+    private boolean isShapeNotSelectedBefore(Shape s) {
         for (Shape shape: selectedShapes) {
             if (shape == s) {
                 if (s.getUserData() instanceof Paket) {
@@ -1027,10 +1040,10 @@ public class MapScreen implements Initializable {
                     rotaInfoList.removeIf(item -> item.getItemObject() == paket);
                     selectedShapes.remove(s);
                 }
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private boolean isSourceSelectedBeforeDestination(int targetItemIndex) {
