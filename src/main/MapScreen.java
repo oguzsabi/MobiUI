@@ -428,6 +428,7 @@ public class MapScreen implements Initializable {
 
     private EventHandler<MouseEvent> tasiyiciLocClicked = t -> {
         Tasiyici tasiyici = ((Tasiyici)((Circle)t.getSource()).getUserData());
+        rotaInfo.getItems().clear();
         selectTasiyici(tasiyici);
     };
 
@@ -1263,10 +1264,15 @@ public class MapScreen implements Initializable {
             setAlignment(Pos.CENTER_LEFT);
 
             setOnDragDetected(event -> {
+                if (getItem() == null || event.getButton() == MouseButton.SECONDARY) {
+                    return;
+                }
+
                 if (getItem().getItemObject() instanceof Durak || getItem().getItemObject() instanceof Vardiya) {
                     setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                 }
-                if (getItem() == null || getItem().getItemObject() instanceof Tasiyici || getItem().getItemObject() instanceof Vardiya) {
+                if (getItem().getItemObject() instanceof Tasiyici || getItem().getItemObject() instanceof Vardiya
+                        || getItem().getItemObject() instanceof Paket) {
                     return;
                 }
 
@@ -1404,7 +1410,9 @@ public class MapScreen implements Initializable {
             });
 
             setOnMouseDragged(event -> {
-                selectedListItem = null;
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    selectedListItem = null;
+                }
             });
 
             setOnContextMenuRequested(event -> {
@@ -1418,10 +1426,10 @@ public class MapScreen implements Initializable {
                 boolean durakWasAPaket = false;
                 Durak[] oldPaket = null;
 
-                for (Durak[] durak: duraklarFromPaketler) {
-                    if (selectedListItem != null) {
+                if (selectedListItem != null && getItem() == selectedListItem) {
+                    for (Durak[] durak: duraklarFromPaketler) {
                         if (selectedListItem.getItemObject() instanceof Durak) {
-                            Durak selectedDurak = (Durak)selectedListItem.getItemObject();
+                            Durak selectedDurak = (Durak) selectedListItem.getItemObject();
                             if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi()) {
                                 oldPaket = durak;
                                 durakWasAPaket = true;
@@ -1429,6 +1437,8 @@ public class MapScreen implements Initializable {
                             }
                         }
                     }
+                } else if (getItem() != selectedListItem) {
+                    selectedListItem = null;
                 }
 
                 if (durakWasAPaket) {
