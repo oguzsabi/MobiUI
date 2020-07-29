@@ -1337,84 +1337,105 @@ public class MapScreen implements Initializable {
                 event.consume();
             });
 
-            setOnDragDone(event -> {
-                if (event.getAcceptingObject() == null) {
-                    removeLocationMark();
-                    boolean durakWasAPaket = false;
-                    Durak[] oldPaket = null;
-
-                    for (Durak[] durak: duraklarFromPaketler) {
-                        if (selectedListItem != null) {
-                            if (selectedListItem.getItemObject() instanceof Durak) {
-                                Durak selectedDurak = (Durak)selectedListItem.getItemObject();
-                                if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi()) {
-                                    oldPaket = durak;
-                                    durakWasAPaket = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (durakWasAPaket) {
-                        convertDuraklarToPaket(oldPaket);
-                    }
-                }
-                selectedListItem = null;
-            });
-
             setOnMouseClicked(event -> {
                 if (getItem() == null) {
                     return;
                 }
 
-                Object selectedObject = getItem().getItemObject();
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    Object selectedObject = getItem().getItemObject();
 
-                int xOffset = 30;
-                int yOffset = 60;
+                    if (getItem() != selectedListItem) {
+                        int xOffset = 30;
+                        int yOffset = 60;
 
-                if (selectedObject instanceof Tasiyici) {
-                    locationMark.setLayoutX(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutX() - xOffset);
-                    locationMark.setLayoutY(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutY() - yOffset);
+                        if (selectedObject instanceof Tasiyici) {
+                            locationMark.setLayoutX(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutX() - xOffset);
+                            locationMark.setLayoutY(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutY() - yOffset);
 
-                    locationMark.setVisible(true);
-                    locationMark1.setVisible(false);
-                } else if (selectedObject instanceof Vardiya) {
-                    locationMark.setLayoutX(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutX() - xOffset);
-                    locationMark.setLayoutY(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutY() - yOffset);
+                            locationMark.setVisible(true);
+                            locationMark1.setVisible(false);
+                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                        } else if (selectedObject instanceof Vardiya) {
+                            locationMark.setLayoutX(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutX() - xOffset);
+                            locationMark.setLayoutY(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutY() - yOffset);
 
-                    locationMark1.setLayoutX(((Vardiya) selectedObject).vardiyaBitisLoc.getLayoutX() - xOffset);
-                    locationMark1.setLayoutY(((Vardiya) selectedObject).vardiyaBitisLoc.getLayoutY() - yOffset);
+                            locationMark1.setLayoutX(((Vardiya) selectedObject).vardiyaBitisLoc.getLayoutX() - xOffset);
+                            locationMark1.setLayoutY(((Vardiya) selectedObject).vardiyaBitisLoc.getLayoutY() - yOffset);
 
-                    locationMark.setVisible(true);
-                    locationMark1.setVisible(true);
-                    setStyle(baseStyleString + "-fx-background-color: #0096C9;");
-                } else if (selectedObject instanceof Durak) {
-                    locationMark.setLayoutX(((Durak) selectedObject).durakLoc.getLayoutX() - xOffset);
-                    locationMark.setLayoutY(((Durak) selectedObject).durakLoc.getLayoutY() - yOffset);
+                            locationMark.setVisible(true);
+                            locationMark1.setVisible(true);
+                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                        } else if (selectedObject instanceof Durak) {
+                            locationMark.setLayoutX(((Durak) selectedObject).durakLoc.getLayoutX() - xOffset);
+                            locationMark.setLayoutY(((Durak) selectedObject).durakLoc.getLayoutY() - yOffset);
 
-                    locationMark.setVisible(true);
-                    locationMark1.setVisible(false);
-                    setStyle(baseStyleString + "-fx-background-color: #0096C9;");
-                } else if (selectedObject instanceof Paket) {
-                    locationMark.setLayoutX(((Paket) selectedObject).gondericiLoc.getLayoutX() - xOffset);
-                    locationMark.setLayoutY(((Paket) selectedObject).gondericiLoc.getLayoutY() - yOffset);
+                            locationMark.setVisible(true);
+                            locationMark1.setVisible(false);
+                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                        } else if (selectedObject instanceof Paket) {
+                            locationMark.setLayoutX(((Paket) selectedObject).gondericiLoc.getLayoutX() - xOffset);
+                            locationMark.setLayoutY(((Paket) selectedObject).gondericiLoc.getLayoutY() - yOffset);
 
-                    locationMark1.setLayoutX(((Paket) selectedObject).aliciLoc.getLayoutX() - xOffset);
-                    locationMark1.setLayoutY(((Paket) selectedObject).aliciLoc.getLayoutY() - yOffset);
+                            locationMark1.setLayoutX(((Paket) selectedObject).aliciLoc.getLayoutX() - xOffset);
+                            locationMark1.setLayoutY(((Paket) selectedObject).aliciLoc.getLayoutY() - yOffset);
 
-                    locationMark.setVisible(true);
-                    locationMark1.setVisible(true);
+                            locationMark.setVisible(true);
+                            locationMark1.setVisible(true);
+                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                        }
+
+                        selectedListItem = getItem();
+                    } else {
+                        removeLocationMark();
+                        if (getItem().getItemObject() instanceof Tasiyici) {
+                            setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
+                        } else if (getItem().getItemObject() instanceof Vardiya) {
+                            setStyle(baseStyleString + "-fx-background-color: dimgray; -fx-text-fill: #323232");
+                        } else if (getItem().getItemObject() instanceof Durak) {
+                            setStyle(baseStyleString + "-fx-background-color: darkgray; -fx-text-fill: #323232");
+                        } else if (getItem().getItemObject() instanceof Paket) {
+                            setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
+                        }
+
+                        selectedListItem = null;
+                    }
                 }
             });
 
+            setOnMouseDragged(event -> {
+                selectedListItem = null;
+            });
+
             setOnContextMenuRequested(event -> {
-                if (getItem() == null) {
+                if (getItem() == null || getItem().getItemObject() instanceof Vardiya) {
+                    return;
+                } else if (getItem().getItemObject() instanceof Tasiyici) {
+                    selectTasiyici((Tasiyici) getItem().getItemObject());
                     return;
                 }
 
-                if (getItem().getItemObject() instanceof Tasiyici) {
-                    selectTasiyici((Tasiyici) getItem().getItemObject());
+                boolean durakWasAPaket = false;
+                Durak[] oldPaket = null;
+
+                for (Durak[] durak: duraklarFromPaketler) {
+                    if (selectedListItem != null) {
+                        if (selectedListItem.getItemObject() instanceof Durak) {
+                            Durak selectedDurak = (Durak)selectedListItem.getItemObject();
+                            if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi()) {
+                                oldPaket = durak;
+                                durakWasAPaket = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (durakWasAPaket) {
+                    removeLocationMark();
+                    convertDuraklarToPaket(oldPaket);
+                    selectedListItem = null;
+                    getListView().getSelectionModel().clearSelection();
                 }
             });
         }
