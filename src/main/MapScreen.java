@@ -1263,6 +1263,9 @@ public class MapScreen implements Initializable {
             setAlignment(Pos.CENTER_LEFT);
 
             setOnDragDetected(event -> {
+                if (getItem().getItemObject() instanceof Durak || getItem().getItemObject() instanceof Vardiya) {
+                    setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                }
                 if (getItem() == null || getItem().getItemObject() instanceof Tasiyici || getItem().getItemObject() instanceof Vardiya) {
                     return;
                 }
