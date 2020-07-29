@@ -429,27 +429,6 @@ public class MapScreen implements Initializable {
     private EventHandler<MouseEvent> tasiyiciLocClicked = t -> {
         Tasiyici tasiyici = ((Tasiyici)((Circle)t.getSource()).getUserData());
         selectTasiyici(tasiyici);
-//        addToListView(-1, tasiyici, rotaInfo);
-//
-//        isTasiyiciSelected = !isTasiyiciSelected;
-//        if (isTasiyiciSelected) {
-//            vardiyaKaydet.setDisable(false);
-//            digerTasiyicilariGosterGizle.setDisable(false);
-//
-//            removeRotaArrows();
-//            selectedTasiyici = tasiyici;
-//            markAllOtherVardiyalar();
-//            markSelectedTasiyiciVardiyalar();
-//
-//            ekstraKmLabel.setText(String.format("%.1f", selectedTasiyici.getEkstraKm()));
-//            ekstraZamanLabel.setText(Integer.toString(selectedTasiyici.getEkstraZaman()));
-//            ekstraDurakLabel.setText(Integer.toString(selectedTasiyici.getEkstraDurak()));
-//
-//            selectedShapes.clear();
-//            selectedShapes.add((Circle)t.getSource());
-//        } else {
-//            returnToDefaultState();
-//        }
     };
 
     private EventHandler<MouseEvent> paketLocClicked = t -> {
@@ -640,7 +619,6 @@ public class MapScreen implements Initializable {
     }
 
     private void showPaketArrows() {
-//        nodeInfo.getItems().clear();
         for (Arrow line: emptyPaketArrows) {
             line.setVisible(true);
         }
@@ -883,10 +861,6 @@ public class MapScreen implements Initializable {
             }
 
             ArrayList<Durak> duraklar = vardiya.getDuraklar();
-
-//            if (duraklar.size() < 1) {
-//
-//            }
 
             for (int durakIndex = 0; durakIndex < duraklar.size(); durakIndex++) {
                 Durak durak = duraklar.get(durakIndex);
