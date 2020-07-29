@@ -1264,6 +1264,7 @@ public class MapScreen implements Initializable {
             setAlignment(Pos.CENTER_LEFT);
 
             setOnDragDetected(event -> {
+                removeLocationMark();
                 if (getItem() == null || event.getButton() == MouseButton.SECONDARY) {
                     return;
                 }
