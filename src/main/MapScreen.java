@@ -56,7 +56,6 @@ public class MapScreen implements Initializable {
     private final double longitudeDivider = 0.0001716615;
     private final double maxLat = 38.616870;
     private final double maxLon = 27.290039;
-    private final int tasiyiciLabelOffset = 7;
     private final int paketLabelOffset = 15;
     private final Color[] tasiyiciColors = {
             Color.GREEN,
@@ -83,19 +82,19 @@ public class MapScreen implements Initializable {
     private double mapWidth;
 
     // selectedShapes is used for getting circle data (instance it belongs to) for later use
-    private ArrayList<Shape> selectedShapes = new ArrayList<>();
+    private final ArrayList<Shape> selectedShapes = new ArrayList<>();
     // addedShapes is used for removing new vardiya or durak circles
-    private ArrayList<Shape> addedShapes = new ArrayList<>();
+    private final ArrayList<Shape> addedShapes = new ArrayList<>();
     // addedLabels is used for removing durak labels
-    private ArrayList<Label> addedLabels = new ArrayList<>();
+    private final ArrayList<Label> addedLabels = new ArrayList<>();
     // emptyPaketArrows keeps packets which are waiting to be delivered. They are removed or added.
-    private ArrayList<Arrow> emptyPaketArrows = new ArrayList<>();
+    private final ArrayList<Arrow> emptyPaketArrows = new ArrayList<>();
     // rotaLines keeps the new rota lines for the selected tasiyici
-    private ArrayList<Arrow> rotaLines = new ArrayList<>();
+    private final ArrayList<Arrow> rotaLines = new ArrayList<>();
     // addedFiles keeps the added files so that they won't be added again
-    private ArrayList<File> addedFiles = new ArrayList<>();
-    private ArrayList<Paket> convertedPaketler = new ArrayList<>();
-    private ArrayList<Durak[]> duraklarFromPaketler = new ArrayList<>();
+    private final ArrayList<File> addedFiles = new ArrayList<>();
+    private final ArrayList<Paket> convertedPaketler = new ArrayList<>();
+    private final ArrayList<Durak[]> duraklarFromPaketler = new ArrayList<>();
     private ObservableList<DraggableListItem> rotaInfoList;
     private boolean isTasiyiciSelected;
     private boolean isDurakSelected = false;
@@ -242,6 +241,7 @@ public class MapScreen implements Initializable {
             tasiyiciLoc.setLayoutX(lonX);
             tasiyiciLoc.setLayoutY(latY);
             tasiyiciLabel.setLabelFor(tasiyiciLoc);
+            int tasiyiciLabelOffset = 7;
             tasiyiciLabel.setLayoutX(lonX + tasiyiciLabelOffset);
             tasiyiciLabel.setLayoutY(latY + tasiyiciLabelOffset);
 
@@ -426,13 +426,13 @@ public class MapScreen implements Initializable {
         }
     }
 
-    private EventHandler<MouseEvent> tasiyiciLocClicked = t -> {
+    private final EventHandler<MouseEvent> tasiyiciLocClicked = t -> {
         Tasiyici tasiyici = ((Tasiyici)((Circle)t.getSource()).getUserData());
         rotaInfo.getItems().clear();
         selectTasiyici(tasiyici);
     };
 
-    private EventHandler<MouseEvent> paketLocClicked = t -> {
+    private final EventHandler<MouseEvent> paketLocClicked = t -> {
         Shape selectedShape = (Shape) t.getSource();
         Paket paket = (Paket) selectedShape.getUserData();
 
@@ -453,14 +453,14 @@ public class MapScreen implements Initializable {
         }
     };
 
-    private EventHandler<MouseEvent> vardiyaLocClicked = t -> {
+    private final EventHandler<MouseEvent> vardiyaLocClicked = t -> {
         Shape selectedShape = (Shape) t.getSource();
         Vardiya vardiya = (Vardiya) selectedShape.getUserData();
         vardiya.arrow.setStroke(Color.BLUE);
         vardiya.arrow.setArrowHeadStroke(Color.BLUE);
     };
 
-    private EventHandler<MouseEvent> durakLocClicked = t -> {
+    private final EventHandler<MouseEvent> durakLocClicked = t -> {
         isDurakSelected = !isDurakSelected;
         Shape selectedShape = (Shape) t.getSource();
         Durak durak = (Durak) selectedShape.getUserData();
@@ -477,31 +477,31 @@ public class MapScreen implements Initializable {
         }
     };
 
-    private EventHandler<ActionEvent> hideEmptyPakets = t -> {
+    private final EventHandler<ActionEvent> hideEmptyPakets = t -> {
         disableAllEmptyPackets();
     };
 
-    private EventHandler<ActionEvent> showEmptyPakets = t -> {
+    private final EventHandler<ActionEvent> showEmptyPakets = t -> {
         enableAllEmptyPackets();
     };
 
-    private EventHandler<ActionEvent> addAllRoutes = t -> {
+    private final EventHandler<ActionEvent> addAllRoutes = t -> {
         drawAllTasiyiciRoutes();
     };
 
-    private EventHandler<ActionEvent> removeAllRoutes = t -> {
+    private final EventHandler<ActionEvent> removeAllRoutes = t -> {
         removeRotaArrows();
     };
 
-    private EventHandler<ActionEvent> removeOtherTasiyicilar = t -> {
+    private final EventHandler<ActionEvent> removeOtherTasiyicilar = t -> {
         removeOtherTasiyicilar();
     };
 
-    private EventHandler<ActionEvent> addOtherTasiyicilar = t -> {
+    private final EventHandler<ActionEvent> addOtherTasiyicilar = t -> {
         addOtherTasiyicilar();
     };
 
-    private EventHandler<MouseEvent> locationMarkClicked = t -> {
+    private final EventHandler<MouseEvent> locationMarkClicked = t -> {
       rotaInfo.getSelectionModel().clearSelection();
       locationMark.setVisible(false);
       locationMark1.setVisible(false);
