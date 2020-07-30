@@ -1239,6 +1239,7 @@ public class MapScreen implements Initializable {
         if (isTasiyiciSelected) {
             if (rotaOlanakLabel.getText().contains("Uygulanamaz")) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText("Dikkat!");
                 alert.setTitle("Rota Değiştirildi!");
                 alert.setContentText("Taşıyıcı rotayı zamanında bitiremeyebilir.\nYine de kaydetmek istiyor musunuz?");
                 ButtonType okButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
