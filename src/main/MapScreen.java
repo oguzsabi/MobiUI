@@ -724,6 +724,7 @@ public class MapScreen implements Initializable {
 
     private void convertPaketToDuraklar(Paket paket) {
         XMLParser.paketler.remove(paket);
+        paketInfo.getItems().removeIf(item -> item.getItemObject() == paket);
         emptyPaketArrows.remove(paket.arrow);
         convertedPaketler.add(paket);
         Color selectedTasiyiciColor = (Color)selectedTasiyici.tasiyiciLoc.getFill();
@@ -789,6 +790,7 @@ public class MapScreen implements Initializable {
             rotaInfoList.remove(durak0);
             duraklarFromPaketler.remove(duraklar);
             XMLParser.paketler.add(paket);
+            addToListView(-1, paket, paketInfo);
             rotaLines.remove(paket.arrow);
 
             paket.gondericiLoc = duraklar[0].durakLoc;
@@ -1431,7 +1433,7 @@ public class MapScreen implements Initializable {
                     for (Durak[] durak: duraklarFromPaketler) {
                         if (selectedListItem.getItemObject() instanceof Durak) {
                             Durak selectedDurak = (Durak) selectedListItem.getItemObject();
-                            if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi()) {
+                            if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi() && selectedListItem.getItemString().contains("Sonradan Eklendi")) {
                                 oldPaket = durak;
                                 durakWasAPaket = true;
                                 break;
