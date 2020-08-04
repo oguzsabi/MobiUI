@@ -300,13 +300,6 @@ public class MapScreen implements Initializable {
             for (Durak durak : duraklar) {
                 Rectangle durakLoc = durak.durakLoc;
                 durakLoc.setFill(selectedTasiyiciColor);
-//                if (durak.getTeslimat() == 0) {
-//                    durakLoc.setFill(selectedTasiyiciColor);
-//                } else {
-//                    durakLoc.setFill(Color.TRANSPARENT);
-//                    durakLoc.setStroke(selectedTasiyiciColor);
-//                    durakLoc.setStrokeWidth(2);
-//                }
                 durakLoc.setUserData(durak);
                 durakLoc.setTranslateX(-durakLoc.getWidth() / 2);
                 durakLoc.setTranslateY(-durakLoc.getHeight() / 2);
@@ -379,13 +372,6 @@ public class MapScreen implements Initializable {
                     for (Durak durak : duraklar) {
                         Rectangle durakLoc = durak.durakLoc;
                         durakLoc.setFill(selectedTasiyiciColor);
-//                        if (durak.getTeslimat() == 0) {
-//                            durakLoc.setFill(selectedTasiyiciColor);
-//                        } else {
-//                            durakLoc.setFill(Color.TRANSPARENT);
-//                            durakLoc.setStroke(selectedTasiyiciColor);
-//                            durakLoc.setStrokeWidth(2);
-//                        }
 
                         durakLoc.setUserData(durak);
                         durakLoc.setOnMouseClicked(durakLocClicked);
@@ -1071,19 +1057,6 @@ public class MapScreen implements Initializable {
                 }
             }
         }
-//        for (int i = 0; i < rotaInfoList.size(); i++) {
-//            DraggableListItem item = rotaInfoList.get(i);
-//            if (item.getItemObject() instanceof Durak) {
-//                Durak targetDurak = (Durak) item.getItemObject();
-//                if (targetDurak.getRefGonderi() == selectedDurak.getRefGonderi() && targetDurak.getTeslimat() != selectedDurak.getTeslimat()) {
-//                    if (selectedDurak.getTeslimat() == 0) {
-//                        return i > targetItemIndex;
-//                    } else {
-//                        return i < targetItemIndex;
-//                    }
-//                }
-//            }
-//        }
         return true;
     }
 
@@ -1144,12 +1117,6 @@ public class MapScreen implements Initializable {
                 listCellString += ilceName + "\n";
             } else if (o instanceof Durak) {
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Durak) o).getY(), ((Durak) o).getX())[0]];
-//                if (((Durak) o).getTeslimat() == 0) {
-//                    listCellString += "   ⬛";
-//                } else {
-//                    listCellString += "   ☐";
-//                }
-
                 for (Durak[] duraklar: duraklarFromPaketler) {
                     if (duraklar[0] == o || duraklar[1] == o) {
                         listCellString += "  (Sonradan Eklendi ✋)";
@@ -1332,7 +1299,6 @@ public class MapScreen implements Initializable {
     }
 
     private class DraggableListCell extends ListCell<DraggableListItem> {
-//        String baseStyleString = "-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;";
         public DraggableListCell() {
             ListCell thisCell = this;
             selectedListItem = null;
@@ -1538,13 +1504,11 @@ public class MapScreen implements Initializable {
             super.updateItem(item, empty);
 
             if (empty || item == null) {
-//                setStyle(baseStyleString);
                 setText(null);
                 setGraphic(null);
             } else {
                 Label header = new Label("empty");
 
-//                setText(getListView().getItems().get(getListView().getItems().indexOf(item)).getItemString());
                 if (item.getItemObject() instanceof Tasiyici) {
                     header.setText("TASIYICI");
                 }
@@ -1556,7 +1520,6 @@ public class MapScreen implements Initializable {
                     header.setTextFill(Color.SIENNA);
                 } else if (item.getItemObject() instanceof Paket) {
                     header.setText("PAKET");
-//                    setStyle(baseStyleString);
                 } else if (item.getItemObject() instanceof Gonderi) {
                     header.setText("GONDERI");
                 }
