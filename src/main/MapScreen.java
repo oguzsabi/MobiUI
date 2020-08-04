@@ -42,7 +42,7 @@ public class MapScreen implements Initializable {
     @FXML Button butunRotalariGosterGizle;
     @FXML Button digerTasiyicilariGosterGizle;
     @FXML VBox wrapperLayout;
-    @FXML VBox leftVBox;
+    @FXML VBox rightVBox;
     @FXML Label rotaOlanakLabel;
     @FXML Label ekstraKmLabel;
     @FXML Label ekstraZamanLabel;
@@ -124,7 +124,7 @@ public class MapScreen implements Initializable {
         tasiyiciInfo.setCellFactory(param -> new DraggableListCell());
         paketInfo.setCellFactory(param -> new DraggableListCell());
         durakInfo = new ListView<>();
-        durakInfo.setMaxWidth(450);
+        durakInfo.setMaxWidth(501);
         durakInfo.setMaxHeight(200);
         durakInfo.setCellFactory(param -> new DraggableListCell());
 
@@ -940,6 +940,7 @@ public class MapScreen implements Initializable {
                 if (item.getItemObject() instanceof Durak) {
                     if (item.getItemObject() == durak) {
                         rotaInfo.getSelectionModel().select(item);
+                        rotaInfo.requestFocus();
                     }
                 }
             }
@@ -1096,7 +1097,7 @@ public class MapScreen implements Initializable {
     private void addDurakInfo() {
         try {
             rotaInfo.scrollTo(rotaInfo.getSelectionModel().getSelectedIndex() - 2);
-            leftVBox.getChildren().add(durakInfo);
+            rightVBox.getChildren().add(durakInfo);
         } catch (IllegalArgumentException e) {
             durakInfo.getItems().clear();
         }
@@ -1108,7 +1109,7 @@ public class MapScreen implements Initializable {
     }
 
     private void removeDurakInfo() {
-        leftVBox.getChildren().remove(durakInfo);
+        rightVBox.getChildren().remove(durakInfo);
         durakInfo.getItems().clear();
     }
 
