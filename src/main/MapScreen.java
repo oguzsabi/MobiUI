@@ -42,6 +42,7 @@ public class MapScreen implements Initializable {
     @FXML Button butunRotalariGosterGizle;
     @FXML Button digerTasiyicilariGosterGizle;
     @FXML VBox wrapperLayout;
+    @FXML VBox leftVBox;
     @FXML Label rotaOlanakLabel;
     @FXML Label ekstraKmLabel;
     @FXML Label ekstraZamanLabel;
@@ -96,6 +97,7 @@ public class MapScreen implements Initializable {
     private final ArrayList<Paket> convertedPaketler = new ArrayList<>();
     private final ArrayList<Durak[]> duraklarFromPaketler = new ArrayList<>();
     private ObservableList<DraggableListItem> rotaInfoList;
+    private ListView<DraggableListItem> durakInfo;
     private boolean isTasiyiciSelected;
     private boolean isDurakSelected = false;
     private Tasiyici selectedTasiyici;
@@ -121,6 +123,10 @@ public class MapScreen implements Initializable {
         rotaInfo.setCellFactory(param -> new DraggableListCell());
         tasiyiciInfo.setCellFactory(param -> new DraggableListCell());
         paketInfo.setCellFactory(param -> new DraggableListCell());
+        durakInfo = new ListView<>();
+        durakInfo.setMaxWidth(450);
+        durakInfo.setMaxHeight(200);
+        durakInfo.setCellFactory(param -> new DraggableListCell());
 
         isTasiyiciSelected = false;
         rotaOlanakLabel.setVisible(false);
@@ -291,13 +297,14 @@ public class MapScreen implements Initializable {
 
             for (Durak durak : duraklar) {
                 Rectangle durakLoc = durak.durakLoc;
-                if (durak.getTeslimat() == 0) {
-                    durakLoc.setFill(selectedTasiyiciColor);
-                } else {
-                    durakLoc.setFill(Color.TRANSPARENT);
-                    durakLoc.setStroke(selectedTasiyiciColor);
-                    durakLoc.setStrokeWidth(2);
-                }
+                durakLoc.setFill(selectedTasiyiciColor);
+//                if (durak.getTeslimat() == 0) {
+//                    durakLoc.setFill(selectedTasiyiciColor);
+//                } else {
+//                    durakLoc.setFill(Color.TRANSPARENT);
+//                    durakLoc.setStroke(selectedTasiyiciColor);
+//                    durakLoc.setStrokeWidth(2);
+//                }
                 durakLoc.setUserData(durak);
                 durakLoc.setTranslateX(-durakLoc.getWidth() / 2);
                 durakLoc.setTranslateY(-durakLoc.getHeight() / 2);
@@ -369,13 +376,14 @@ public class MapScreen implements Initializable {
 
                     for (Durak durak : duraklar) {
                         Rectangle durakLoc = durak.durakLoc;
-                        if (durak.getTeslimat() == 0) {
-                            durakLoc.setFill(selectedTasiyiciColor);
-                        } else {
-                            durakLoc.setFill(Color.TRANSPARENT);
-                            durakLoc.setStroke(selectedTasiyiciColor);
-                            durakLoc.setStrokeWidth(2);
-                        }
+                        durakLoc.setFill(selectedTasiyiciColor);
+//                        if (durak.getTeslimat() == 0) {
+//                            durakLoc.setFill(selectedTasiyiciColor);
+//                        } else {
+//                            durakLoc.setFill(Color.TRANSPARENT);
+//                            durakLoc.setStroke(selectedTasiyiciColor);
+//                            durakLoc.setStrokeWidth(2);
+//                        }
 
                         durakLoc.setUserData(durak);
                         durakLoc.setOnMouseClicked(durakLocClicked);
@@ -727,7 +735,7 @@ public class MapScreen implements Initializable {
         paketInfo.getItems().removeIf(item -> item.getItemObject() == paket);
         emptyPaketArrows.remove(paket.arrow);
         convertedPaketler.add(paket);
-        Color selectedTasiyiciColor = (Color)selectedTasiyici.tasiyiciLoc.getFill();
+        Color selectedTasiyiciColor = (Color) selectedTasiyici.tasiyiciLoc.getFill();
 
         Durak[] duraklar = paket.convertPaketToDuraklar();
         duraklarFromPaketler.add(duraklar);
@@ -766,7 +774,7 @@ public class MapScreen implements Initializable {
 
         for (int i = 0; i < convertedPaketler.size(); i++) {
             Paket p = convertedPaketler.get(i);
-            if (duraklar[0].getRefGonderi() == p.getRefGonderi()) {
+            if (duraklar[0].getGonderiler().get(0).getRefGonderi() == p.getRefGonderi()) {
                 paket = p;
                 convertedPaketler.remove(p);
             }
@@ -1025,19 +1033,42 @@ public class MapScreen implements Initializable {
 
     private boolean isSourceSelectedBeforeDestination(int targetItemIndex) {
         Durak selectedDurak = (Durak) selectedListItem.getItemObject();
-        for (int i = 0; i < rotaInfoList.size(); i++) {
+        int startIndex = targetItemIndex;
+        int endIndex = rotaInfo.getSelectionModel().getSelectedIndex();
+
+        if (startIndex > endIndex) {
+            int temp = endIndex;
+            endIndex = startIndex + 1;
+            startIndex = temp + 1;
+        }
+
+        for (int i = startIndex; i < endIndex; i++) {
             DraggableListItem item = rotaInfoList.get(i);
             if (item.getItemObject() instanceof Durak) {
+                System.out.println(((Durak) item.getItemObject()).getDurakId());
                 Durak targetDurak = (Durak) item.getItemObject();
-                if (targetDurak.getRefGonderi() == selectedDurak.getRefGonderi() && targetDurak.getTeslimat() != selectedDurak.getTeslimat()) {
-                    if (selectedDurak.getTeslimat() == 0) {
-                        return i > targetItemIndex;
-                    } else {
-                        return i < targetItemIndex;
+                for (Gonderi targetGonderi: targetDurak.getGonderiler()) {
+                    for (Gonderi selectedGonderi: selectedDurak.getGonderiler()) {
+                        if (targetGonderi.getRefGonderi() == selectedGonderi.getRefGonderi()) {
+                            return false;
+                        }
                     }
                 }
             }
         }
+//        for (int i = 0; i < rotaInfoList.size(); i++) {
+//            DraggableListItem item = rotaInfoList.get(i);
+//            if (item.getItemObject() instanceof Durak) {
+//                Durak targetDurak = (Durak) item.getItemObject();
+//                if (targetDurak.getRefGonderi() == selectedDurak.getRefGonderi() && targetDurak.getTeslimat() != selectedDurak.getTeslimat()) {
+//                    if (selectedDurak.getTeslimat() == 0) {
+//                        return i > targetItemIndex;
+//                    } else {
+//                        return i < targetItemIndex;
+//                    }
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -1048,6 +1079,25 @@ public class MapScreen implements Initializable {
             }
         }
         return true;
+    }
+
+    private void addDurakInfo() {
+        try {
+            rotaInfo.scrollTo(rotaInfo.getSelectionModel().getSelectedIndex() - 2);
+            leftVBox.getChildren().add(durakInfo);
+        } catch (IllegalArgumentException e) {
+            durakInfo.getItems().clear();
+        }
+
+        Durak selectedDurak = (Durak) selectedListItem.getItemObject();
+        for (Gonderi gonderi: selectedDurak.getGonderiler()) {
+            addToListView(-1, gonderi, durakInfo);
+        }
+    }
+
+    private void removeDurakInfo() {
+        leftVBox.getChildren().remove(durakInfo);
+        durakInfo.getItems().clear();
     }
 
     private void addToTasiyiciInfo() {
@@ -1080,11 +1130,11 @@ public class MapScreen implements Initializable {
                 listCellString += ilceName + "\n";
             } else if (o instanceof Durak) {
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Durak) o).getY(), ((Durak) o).getX())[0]];
-                if (((Durak) o).getTeslimat() == 0) {
-                    listCellString += "   ⬛";
-                } else {
-                    listCellString += "   ☐";
-                }
+//                if (((Durak) o).getTeslimat() == 0) {
+//                    listCellString += "   ⬛";
+//                } else {
+//                    listCellString += "   ☐";
+//                }
 
                 for (Durak[] duraklar: duraklarFromPaketler) {
                     if (duraklar[0] == o || duraklar[1] == o) {
@@ -1099,11 +1149,20 @@ public class MapScreen implements Initializable {
                 listCellString += ilceName + " -> ";
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Paket) o).getAliciY(), ((Paket) o).getAliciX())[0]];
                 listCellString += ilceName + "\n";
+            } else if (o instanceof Gonderi) {
+                listCellString += "\n";
             }
 
             for (PropertyDescriptor propertyDesc : beanInfo.getPropertyDescriptors()) {
                 String propertyName = propertyDesc.getName();
-                Object value = propertyDesc.getReadMethod().invoke(o);
+                Object value;
+                try {
+                     value = propertyDesc.getReadMethod().invoke(o);
+                } catch (NullPointerException e) {
+                    System.err.println("The value of " + propertyName + " was null");
+                    System.err.println("\tThe object was " + o);
+                    return;
+                }
 
                 if (propertyName.equals("refTasiyici"))
                     listCellString += "Tasiyici no: " + value + "\n";
@@ -1163,6 +1222,7 @@ public class MapScreen implements Initializable {
 
         clearEkstraLabels();
         removeLocationMark();
+        removeDurakInfo();
 
         digerTasiyicilariGosterGizle.setText("Diger Tasiyicilari Gizle");
         digerTasiyicilariGosterGizle.setOnAction(removeOtherTasiyicilar);
@@ -1360,6 +1420,7 @@ public class MapScreen implements Initializable {
                         int yOffset = 60;
 
                         if (selectedObject instanceof Tasiyici) {
+                            removeDurakInfo();
                             locationMark.setLayoutX(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutX() - xOffset);
                             locationMark.setLayoutY(((Tasiyici) selectedObject).tasiyiciLoc.getLayoutY() - yOffset);
 
@@ -1367,6 +1428,7 @@ public class MapScreen implements Initializable {
                             locationMark1.setVisible(false);
                             setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Vardiya) {
+                            removeDurakInfo();
                             locationMark.setLayoutX(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutX() - xOffset);
                             locationMark.setLayoutY(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutY() - yOffset);
 
@@ -1377,6 +1439,8 @@ public class MapScreen implements Initializable {
                             locationMark1.setVisible(true);
                             setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Durak) {
+                            selectedListItem = getItem();
+                            addDurakInfo();
                             locationMark.setLayoutX(((Durak) selectedObject).durakLoc.getLayoutX() - xOffset);
                             locationMark.setLayoutY(((Durak) selectedObject).durakLoc.getLayoutY() - yOffset);
 
@@ -1384,6 +1448,7 @@ public class MapScreen implements Initializable {
                             locationMark1.setVisible(false);
                             setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Paket) {
+                            removeDurakInfo();
                             locationMark.setLayoutX(((Paket) selectedObject).gondericiLoc.getLayoutX() - xOffset);
                             locationMark.setLayoutY(((Paket) selectedObject).gondericiLoc.getLayoutY() - yOffset);
 
@@ -1393,19 +1458,27 @@ public class MapScreen implements Initializable {
                             locationMark.setVisible(true);
                             locationMark1.setVisible(true);
                             setStyle(baseStyleString + "-fx-background-color: #0096C9;");
+                        } else if (selectedObject instanceof Gonderi) {
+                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         }
 
                         selectedListItem = getItem();
                     } else {
-                        removeLocationMark();
-                        if (getItem().getItemObject() instanceof Tasiyici) {
+                        if (getItem().getItemObject() instanceof Gonderi) {
                             setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
-                        } else if (getItem().getItemObject() instanceof Vardiya) {
-                            setStyle(baseStyleString + "-fx-background-color: dimgray; -fx-text-fill: #323232");
-                        } else if (getItem().getItemObject() instanceof Durak) {
-                            setStyle(baseStyleString + "-fx-background-color: darkgray; -fx-text-fill: #323232");
-                        } else if (getItem().getItemObject() instanceof Paket) {
-                            setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
+                        } else {
+                            removeLocationMark();
+                            removeDurakInfo();
+
+                            if (getItem().getItemObject() instanceof Tasiyici) {
+                                setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
+                            } else if (getItem().getItemObject() instanceof Vardiya) {
+                                setStyle(baseStyleString + "-fx-background-color: dimgray; -fx-text-fill: #323232");
+                            } else if (getItem().getItemObject() instanceof Durak) {
+                                setStyle(baseStyleString + "-fx-background-color: darkgray; -fx-text-fill: #323232");
+                            } else if (getItem().getItemObject() instanceof Paket) {
+                                setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
+                            }
                         }
 
                         selectedListItem = null;
@@ -1427,6 +1500,15 @@ public class MapScreen implements Initializable {
                     return;
                 }
 
+                if (getItem().getItemObject() instanceof Paket) {
+                    if (isTasiyiciSelected) {
+                        vardiyaKaydet.setDisable(false);
+                        convertPaketToDuraklar((Paket) getItem().getItemObject());
+                        drawNewRouteArrows();
+                        return;
+                    }
+                }
+
                 boolean durakWasAPaket = false;
                 Durak[] oldPaket = null;
 
@@ -1434,7 +1516,7 @@ public class MapScreen implements Initializable {
                     for (Durak[] durak: duraklarFromPaketler) {
                         if (selectedListItem.getItemObject() instanceof Durak) {
                             Durak selectedDurak = (Durak) selectedListItem.getItemObject();
-                            if (durak[0].getRefGonderi() == selectedDurak.getRefGonderi() && selectedListItem.getItemString().contains("Sonradan Eklendi")) {
+                            if (durak[0].getGonderiler().get(0).getRefGonderi() == selectedDurak.getGonderiler().get(0).getRefGonderi() && selectedListItem.getItemString().contains("Sonradan Eklendi")) {
                                 oldPaket = durak;
                                 durakWasAPaket = true;
                                 break;
@@ -1447,6 +1529,7 @@ public class MapScreen implements Initializable {
 
                 if (durakWasAPaket) {
                     removeLocationMark();
+                    removeDurakInfo();
                     convertDuraklarToPaket(oldPaket);
                     selectedListItem = null;
                     getListView().getSelectionModel().clearSelection();

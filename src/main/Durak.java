@@ -4,25 +4,24 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+
 public class Durak {
-    private int refGonderi;
+    private String durakId;
+    private int gonderiSayisi;
     private double X;
     private double Y;
     private int varisSuresi;
-    private double ucret;
-    private int teslimat;
+    private ArrayList<Gonderi> gonderiler;
     public Rectangle durakLoc;
     public Label durakLabel;
     public Arrow arrow;
 
-    public Durak(int refGonderi, double x, double y, int varisSuresi, double ucret, int teslimat) {
-        this.refGonderi = refGonderi;
+    public Durak(double x, double y, int varisSuresi) {
         X = x;
         Y = y;
         this.varisSuresi = varisSuresi;
-        this.ucret = ucret;
-        this.teslimat = teslimat;
-        durakLabel = new Label(Integer.toString(refGonderi));
+        durakLabel = new Label(durakId);
         durakLabel.setTextFill(Color.BLUE);
         durakLabel.setScaleX(2);
         durakLabel.setScaleY(2);
@@ -32,17 +31,29 @@ public class Durak {
         arrow = new Arrow();
     }
 
-    public Paket convertDuraklarToPaket(Durak gonderici, Durak alici) {
-        return new Paket(gonderici.refGonderi, gonderici.X, gonderici.Y, alici.X, alici.Y, alici.ucret);
+    public Durak(String durakId, int gonderiSayisi, double x, double y, int varisSuresi, ArrayList<Gonderi> gonderiler) {
+        this.durakId = durakId;
+        this.gonderiSayisi = gonderiSayisi;
+        X = x;
+        Y = y;
+        this.varisSuresi = varisSuresi;
+        this.gonderiler = gonderiler;
+        durakLabel = new Label(durakId);
+        if (durakId.length() > 32) {
+            durakLabel.setText(durakId.substring(0, 3));
+        }
+        durakLabel.setTextFill(Color.BLUE);
+        durakLabel.setScaleX(2);
+        durakLabel.setScaleY(2);
+        durakLoc = new Rectangle();
+        durakLoc.setWidth(10);
+        durakLoc.setHeight(10);
+        arrow = new Arrow();
     }
 
-    public int getRefGonderi() {
-        return refGonderi;
-    }
-
-    public void setRefGonderi(int refGonderi) {
-        this.refGonderi = refGonderi;
-    }
+//    public Paket convertDuraklarToPaket(Durak gonderici, Durak alici) {
+//        return new Paket(gonderici.refGonderi, gonderici.X, gonderici.Y, alici.X, alici.Y, alici.ucret);
+//    }
 
     public double getX() {
         return X;
@@ -68,19 +79,27 @@ public class Durak {
         this.varisSuresi = (int) varisSuresi;
     }
 
-    public double getUcret() {
-        return ucret;
+    public String getDurakId() {
+        return durakId;
     }
 
-    public void setUcret(double ucret) {
-        this.ucret = ucret;
+    public void setDurakId(String durakId) {
+        this.durakId = durakId;
     }
 
-    public int getTeslimat() {
-        return teslimat;
+    public int getGonderiSayisi() {
+        return gonderiSayisi;
     }
 
-    public void setTeslimat(int teslimat) {
-        this.teslimat = teslimat;
+    public void setGonderiSayisi(int gonderiSayisi) {
+        this.gonderiSayisi = gonderiSayisi;
+    }
+
+    public ArrayList<Gonderi> getGonderiler() {
+        return gonderiler;
+    }
+
+    public void setGonderiler(ArrayList<Gonderi> gonderiler) {
+        this.gonderiler = gonderiler;
     }
 }

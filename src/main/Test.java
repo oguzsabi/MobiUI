@@ -8,6 +8,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.UUID;
 
 public class Test {
     public static void main(String[] args) {
@@ -32,5 +33,8 @@ public class Test {
 //
 //        time = hour + ":" + minutes;
 //        System.out.println("Second as time: " + time);
+
+        UUID uuid = UUID.randomUUID();
+        System.out.println(uuid.toString());
     }
 }

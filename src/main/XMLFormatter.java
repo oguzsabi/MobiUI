@@ -47,6 +47,30 @@ public class XMLFormatter {
             attr.setValue(Double.toString(selectedTasiyici.getDurumY()));
             tasiyiciElement.setAttributeNode(attr);
 
+            attr = doc.createAttribute("DurumSaat");
+            attr.setValue(selectedTasiyici.getDurumSaatAsStringTime());
+            tasiyiciElement.setAttributeNode(attr);
+
+            attr = doc.createAttribute("kmBeklenti");
+            attr.setValue(Double.toString(selectedTasiyici.getKmBeklenti()));
+            tasiyiciElement.setAttributeNode(attr);
+
+            attr = doc.createAttribute("dkBeklenti");
+            attr.setValue(Integer.toString(selectedTasiyici.getDkBeklenti()));
+            tasiyiciElement.setAttributeNode(attr);
+
+            attr = doc.createAttribute("ratingSayisi");
+            attr.setValue(Integer.toString(selectedTasiyici.getRatingSayisi()));
+            tasiyiciElement.setAttributeNode(attr);
+
+            attr = doc.createAttribute("ratingToplam");
+            attr.setValue(Integer.toString(selectedTasiyici.getRatingToplam()));
+            tasiyiciElement.setAttributeNode(attr);
+
+            attr = doc.createAttribute("vardiyaSayisi");
+            attr.setValue(Integer.toString(selectedTasiyici.getVardiyaSayisi()));
+            tasiyiciElement.setAttributeNode(attr);
+
             ArrayList<Vardiya> vardiyalar = selectedTasiyici.getVardiyalar();
 
             for (Vardiya vardiya: vardiyalar) {
@@ -83,9 +107,9 @@ public class XMLFormatter {
                     durakElement = doc.createElement("durak");
                     vardiyaElement.appendChild(durakElement);
 
-                    attr = doc.createAttribute("refGonderi");
-                    attr.setValue(Integer.toString(durak.getRefGonderi()));
-                    durakElement.setAttributeNode(attr);
+//                    attr = doc.createAttribute("refGonderi");
+//                    attr.setValue(Integer.toString(durak.getRefGonderi()));
+//                    durakElement.setAttributeNode(attr);
 
                     attr = doc.createAttribute("X");
                     attr.setValue(Double.toString(durak.getX()));
@@ -99,13 +123,13 @@ public class XMLFormatter {
                     attr.setValue(Integer.toString(durak.getVarisSuresi()));
                     durakElement.setAttributeNode(attr);
 
-                    attr = doc.createAttribute("Ucret");
-                    attr.setValue(Double.toString(durak.getUcret()));
-                    durakElement.setAttributeNode(attr);
-
-                    attr = doc.createAttribute("Teslimat");
-                    attr.setValue(Integer.toString(durak.getTeslimat()));
-                    durakElement.setAttributeNode(attr);
+//                    attr = doc.createAttribute("Ucret");
+//                    attr.setValue(Double.toString(durak.getUcret()));
+//                    durakElement.setAttributeNode(attr);
+//
+//                    attr = doc.createAttribute("Teslimat");
+//                    attr.setValue(Integer.toString(durak.getTeslimat()));
+//                    durakElement.setAttributeNode(attr);
 
 
                 }

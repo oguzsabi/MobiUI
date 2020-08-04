@@ -4,6 +4,11 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.UUID;
+
 public class Paket {
     private int refGonderi;
     private double gondericiX;
@@ -11,19 +16,21 @@ public class Paket {
     private double aliciX;
     private double aliciY;
     private double ucret;
+    private int durum;
     public Label gondericiLabel;
     public Label aliciLabel;
     public Rectangle gondericiLoc;
     public Rectangle aliciLoc;
     public Arrow arrow;
 
-    public Paket(int refGonderi, double gondericiX, double gondericiY, double aliciX, double aliciY, double ucret) {
+    public Paket(int refGonderi, double gondericiX, double gondericiY, double aliciX, double aliciY, double ucret, int durum) {
         this.refGonderi = refGonderi;
         this.gondericiX = gondericiX;
         this.gondericiY = gondericiY;
         this.aliciX = aliciX;
         this.aliciY = aliciY;
         this.ucret = ucret;
+        this.durum = durum;
         gondericiLabel = new Label(Integer.toString(refGonderi));
         aliciLabel = new Label(Integer.toString(refGonderi));
         gondericiLoc = new Rectangle();
@@ -52,8 +59,8 @@ public class Paket {
     }
 
     public Durak[] convertPaketToDuraklar() {
-        Durak durak0 = new Durak(this.refGonderi, this.gondericiX, this.gondericiY, 10, this.ucret, 0);
-        Durak durak1 = new Durak(this.refGonderi, this.aliciX, this.aliciY, 10, this.ucret, 1);
+        Durak durak0 = new Durak(UUID.randomUUID().toString(), 1, this.gondericiX, this.gondericiY, 20, new ArrayList<>(Collections.singletonList(new Gonderi(this.refGonderi, 0, 0))));
+        Durak durak1 = new Durak(UUID.randomUUID().toString(), 1, this.aliciX, this.aliciY, 20, new ArrayList<>(Collections.singletonList(new Gonderi(this.refGonderi, this.ucret, 1))));
         return new Durak[]{durak0, durak1};
     }
 
@@ -103,5 +110,13 @@ public class Paket {
 
     public void setUcret(double ucret) {
         this.ucret = ucret;
+    }
+
+    public int getDurum() {
+        return durum;
+    }
+
+    public void setDurum(int durum) {
+        this.durum = durum;
     }
 }

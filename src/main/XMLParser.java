@@ -37,8 +37,9 @@ public class XMLParser {
                     double aliciX = Double.parseDouble(element.getAttribute("AliciX"));
                     double aliciY = Double.parseDouble(element.getAttribute("AliciY"));
                     double ucret = Double.parseDouble(element.getAttribute("Ucret"));
+                    int durum = Integer.parseInt(element.getAttribute("Durum"));
 
-                    paketler.add(new Paket(refGonderi, gondericiX, gondericiY, aliciX, aliciY, ucret));
+                    paketler.add(new Paket(refGonderi, gondericiX, gondericiY, aliciX, aliciY, ucret, durum));
                 }
             }
 
@@ -83,18 +84,36 @@ public class XMLParser {
 
                                 if (durakNode.getNodeType() == Node.ELEMENT_NODE) {
                                     Element durakElement = (Element) durakNode;
+                                    NodeList gonderiList = durakElement.getElementsByTagName("gonderi");
+                                    ArrayList<Gonderi> gonderilerTemp = new ArrayList<>();
 
-                                    int refGonderi = Integer.parseInt(durakElement.getAttribute("refGonderi"));
+                                    for (int gonderiIndex = 0; gonderiIndex < gonderiList.getLength(); gonderiIndex++) {
+                                        Node gonderiNode = gonderiList.item(gonderiIndex);
+
+                                        if (gonderiNode.getNodeType() == Node.ELEMENT_NODE) {
+                                            Element gonderiElement = (Element) gonderiNode;
+
+                                            int refGonderi = Integer.parseInt(gonderiElement.getAttribute("refGonderi"));
+                                            double ucret = Double.parseDouble(gonderiElement.getAttribute("Ucret"));
+                                            int teslimat = Integer.parseInt(gonderiElement.getAttribute("Teslimat"));
+
+                                            gonderilerTemp.add(new Gonderi(refGonderi, ucret, teslimat));
+                                        }
+                                    }
+
+                                    String durakId = durakElement.getAttribute("durakid");
+                                    int gonderiSayisi = Integer.parseInt(durakElement.getAttribute("gonderiSayisi"));
                                     double X = Double.parseDouble(durakElement.getAttribute("X"));
                                     double Y = Double.parseDouble(durakElement.getAttribute("Y"));
                                     int varisSuresi = Integer.parseInt(durakElement.getAttribute("varisSuresi"));
-                                    double ucret = Double.parseDouble(durakElement.getAttribute("Ucret"));
-                                    int teslimat = Integer.parseInt(durakElement.getAttribute("Teslimat"));
 
-                                    duraklarTemp.add(new Durak(refGonderi, X, Y, varisSuresi, ucret, teslimat));
+                                    duraklarTemp.add(new Durak(durakId, gonderiSayisi, X, Y, varisSuresi, gonderilerTemp));
                                 }
                             }
 
+                            int vardiyaId = Integer.parseInt(vardiyaElement.getAttribute("vardiyaid"));
+                            String rotaId = vardiyaElement.getAttribute("rotaid");
+                            int durakSayisi = Integer.parseInt(vardiyaElement.getAttribute("durakSayisi"));
                             String saatBaslangic = vardiyaElement.getAttribute("saatBaslangic");
                             String saatBitis = vardiyaElement.getAttribute("saatBitis");
                             double baslangicX = Double.parseDouble(vardiyaElement.getAttribute("BaslangicX"));
@@ -103,6 +122,9 @@ public class XMLParser {
                             double bitisY = Double.parseDouble(vardiyaElement.getAttribute("BitisY"));
 
                             vardiyalarTemp.add(new Vardiya(
+                                    vardiyaId,
+                                    rotaId,
+                                    durakSayisi,
                                     saatBaslangic,
                                     saatBitis,
                                     baslangicX,
@@ -117,8 +139,14 @@ public class XMLParser {
                     int refTasiyici = Integer.parseInt(tasiyiciElement.getAttribute("refTasiyici"));
                     double durumX = Double.parseDouble(tasiyiciElement.getAttribute("DurumX"));
                     double durumY = Double.parseDouble(tasiyiciElement.getAttribute("DurumY"));
+                    String durumSaat = tasiyiciElement.getAttribute("DurumSaat");
+                    double kmBeklenti = Double.parseDouble(tasiyiciElement.getAttribute("kmBeklenti"));
+                    int dkBeklenti = Integer.parseInt(tasiyiciElement.getAttribute("dkBeklenti"));
+                    int ratingSayisi = Integer.parseInt(tasiyiciElement.getAttribute("ratingSayisi"));
+                    int ratingToplam = Integer.parseInt(tasiyiciElement.getAttribute("ratingToplam"));
+                    int vardiyaSayisi = Integer.parseInt(tasiyiciElement.getAttribute("vardiyaSayisi"));
 
-                    tasiyicilar.add(new Tasiyici(refTasiyici, durumX, durumY, vardiyalarTemp));
+                    tasiyicilar.add(new Tasiyici(refTasiyici, durumX, durumY, durumSaat, kmBeklenti, dkBeklenti, ratingSayisi, ratingToplam, vardiyaSayisi, vardiyalarTemp));
                 }
             }
 

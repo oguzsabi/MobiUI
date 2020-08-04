@@ -3,9 +3,13 @@ package main;
 import javafx.scene.shape.Polygon;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class Vardiya {
+    private int vardiyaId;
+    private String rotaId;
+    private int durakSayisi;
     private int saatBaslangic;
     private int saatBitis;
     private int vardiyaBitisVarisSuresi;
@@ -18,7 +22,13 @@ public class Vardiya {
     public Polygon vardiyaBitisLoc;
     public Arrow arrow;
 
-    public Vardiya(String saatBaslangic, String saatBitis, double baslangicX, double baslangicY, double bitisX, double bitisY, ArrayList<Durak> duraklar) {
+    public Vardiya(int vardiyaId, String rotaId, int durakSayisi, String saatBaslangic, String saatBitis, double baslangicX, double baslangicY, double bitisX, double bitisY, ArrayList<Durak> duraklar) {
+        this.vardiyaId = vardiyaId;
+        this.rotaId = rotaId;
+        if (rotaId.length() < 1) {
+            this.rotaId = UUID.randomUUID().toString();
+        }
+        this.durakSayisi = durakSayisi;
         this.saatBaslangic = stringTimeToIntegerSeconds(saatBaslangic);
         this.saatBitis = stringTimeToIntegerSeconds(saatBitis);
         this.baslangicX = baslangicX;
@@ -126,5 +136,29 @@ public class Vardiya {
 
     public void setVardiyaBitisVarisSuresi(int vardiyaBitisVarisSuresi) {
         this.vardiyaBitisVarisSuresi = vardiyaBitisVarisSuresi;
+    }
+
+    public int getVardiyaId() {
+        return vardiyaId;
+    }
+
+    public void setVardiyaId(int vardiyaId) {
+        this.vardiyaId = vardiyaId;
+    }
+
+    public String getRotaId() {
+        return rotaId;
+    }
+
+    public void setRotaId(String rotaId) {
+        this.rotaId = rotaId;
+    }
+
+    public int getDurakSayisi() {
+        return durakSayisi;
+    }
+
+    public void setDurakSayisi(int durakSayisi) {
+        this.durakSayisi = durakSayisi;
     }
 }
