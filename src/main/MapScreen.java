@@ -15,11 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -94,14 +92,13 @@ public class MapScreen implements Initializable {
     // rotaLines keeps the new rota lines for the selected tasiyici
     private final ArrayList<Arrow> rotaLines = new ArrayList<>();
     // addedFiles keeps the added files so that they won't be added again
-    private final ArrayList<File> addedFiles = new ArrayList<>();
+//    private final ArrayList<File> addedFiles = new ArrayList<>();
     private final ArrayList<Paket> convertedPaketler = new ArrayList<>();
     private final ArrayList<Durak[]> duraklarFromPaketler = new ArrayList<>();
     private ObservableList<DraggableListItem> rotaInfoList;
     private ListView<DraggableListItem> durakInfo;
     private boolean isTasiyiciSelected;
     private boolean isDurakSelected = false;
-    private boolean firstUpdate = true;
     private Tasiyici selectedTasiyici;
     private DraggableListItem selectedListItem;
 
@@ -144,7 +141,7 @@ public class MapScreen implements Initializable {
         mapScrollPane.addEventFilter(ScrollEvent.ANY, event -> {
             if (event.getDeltaY() > 0) {
                 double sliderVal = zoomSlider.getValue();
-                zoomSlider.setValue(sliderVal += 0.1);
+                zoomSlider.setValue(sliderVal + 0.1);
             } else {
                 double sliderVal = zoomSlider.getValue();
                 zoomSlider.setValue(sliderVal + -0.1);
@@ -168,13 +165,13 @@ public class MapScreen implements Initializable {
     }
 
     @FXML
-    public void zoomIn(ActionEvent event) {
+    public void zoomIn() {
         double sliderVal = zoomSlider.getValue();
-        zoomSlider.setValue(sliderVal += 0.1);
+        zoomSlider.setValue(sliderVal + 0.1);
     }
 
     @FXML
-    public void zoomOut(ActionEvent event) {
+    public void zoomOut() {
         double sliderVal = zoomSlider.getValue();
         zoomSlider.setValue(sliderVal + -0.1);
     }
@@ -474,29 +471,17 @@ public class MapScreen implements Initializable {
         }
     };
 
-    private final EventHandler<ActionEvent> hideEmptyPakets = t -> {
-        disableAllEmptyPackets();
-    };
+    private final EventHandler<ActionEvent> hideEmptyPakets = t -> disableAllEmptyPackets();
 
-    private final EventHandler<ActionEvent> showEmptyPakets = t -> {
-        enableAllEmptyPackets();
-    };
+    private final EventHandler<ActionEvent> showEmptyPakets = t -> enableAllEmptyPackets();
 
-    private final EventHandler<ActionEvent> addAllRoutes = t -> {
-        drawAllTasiyiciRoutes();
-    };
+    private final EventHandler<ActionEvent> addAllRoutes = t -> drawAllTasiyiciRoutes();
 
-    private final EventHandler<ActionEvent> removeAllRoutes = t -> {
-        removeRotaArrows();
-    };
+    private final EventHandler<ActionEvent> removeAllRoutes = t -> removeRotaArrows();
 
-    private final EventHandler<ActionEvent> removeOtherTasiyicilar = t -> {
-        removeOtherTasiyicilar();
-    };
+    private final EventHandler<ActionEvent> removeOtherTasiyicilar = t -> removeOtherTasiyicilar();
 
-    private final EventHandler<ActionEvent> addOtherTasiyicilar = t -> {
-        addOtherTasiyicilar();
-    };
+    private final EventHandler<ActionEvent> addOtherTasiyicilar = t -> addOtherTasiyicilar();
 
     private final EventHandler<MouseEvent> locationMarkClicked = t -> {
       rotaInfo.getSelectionModel().clearSelection();
@@ -1060,14 +1045,14 @@ public class MapScreen implements Initializable {
         return true;
     }
 
-    private boolean isFileNotAddedBefore(File file) {
-        for (File addedFile: addedFiles) {
-            if (addedFile.equals(file)) {
-                return false;
-            }
-        }
-        return true;
-    }
+//    private boolean isFileNotAddedBefore(File file) {
+//        for (File addedFile: addedFiles) {
+//            if (addedFile.equals(file)) {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     private void addDurakInfo() {
         try {
@@ -1102,36 +1087,36 @@ public class MapScreen implements Initializable {
     private void addToListView(int index, Object o, ListView<DraggableListItem> listView) {
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(o.getClass());
-            String listCellString = o.getClass().getName().substring(5).toUpperCase();
+            StringBuilder listCellStringBuilder = new StringBuilder(o.getClass().getName().substring(5).toUpperCase());
             String ilceName;
 
             //☐ ⬛ ▽ ▼ ⬤ ✋
             if (o instanceof Tasiyici) {
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Tasiyici) o).getDurumY(), ((Tasiyici) o).getDurumX())[0]];
-                listCellString += "\n" + ilceName + "\n";
+                listCellStringBuilder.append("\n").append(ilceName).append("\n");
             } else if (o instanceof Vardiya) {
-                listCellString += "   ▼ ▽\n";
+                listCellStringBuilder.append("   ▼ ▽\n");
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Vardiya) o).getBaslangicY(), ((Vardiya) o).getBaslangicX())[0]];
-                listCellString += ilceName + " -> ";
+                listCellStringBuilder.append(ilceName).append(" -> ");
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Vardiya) o).getBitisY(), ((Vardiya) o).getBitisX())[0]];
-                listCellString += ilceName + "\n";
+                listCellStringBuilder.append(ilceName).append("\n");
             } else if (o instanceof Durak) {
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Durak) o).getY(), ((Durak) o).getX())[0]];
                 for (Durak[] duraklar: duraklarFromPaketler) {
                     if (duraklar[0] == o || duraklar[1] == o) {
-                        listCellString += "  (Sonradan Eklendi ✋)";
+                        listCellStringBuilder.append("  (Sonradan Eklendi ✋)");
                     }
                 }
 
-                listCellString += "\n" + ilceName + "\n";
+                listCellStringBuilder.append("\n").append(ilceName).append("\n");
             } else if (o instanceof  Paket) {
-                listCellString += "\n";
+                listCellStringBuilder.append("\n");
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Paket) o).getGondericiY(), ((Paket) o).getGondericiX())[0]];
-                listCellString += ilceName + " -> ";
+                listCellStringBuilder.append(ilceName).append(" -> ");
                 ilceName = Calculator.ilceler[(int) Calculator.findClosestIlce(((Paket) o).getAliciY(), ((Paket) o).getAliciX())[0]];
-                listCellString += ilceName + "\n";
+                listCellStringBuilder.append(ilceName).append("\n");
             } else if (o instanceof Gonderi) {
-                listCellString += "\n";
+                listCellStringBuilder.append("\n");
             }
 
             for (PropertyDescriptor propertyDesc : beanInfo.getPropertyDescriptors()) {
@@ -1139,51 +1124,52 @@ public class MapScreen implements Initializable {
                 Object value = propertyDesc.getReadMethod().invoke(o);
 
                 if (propertyName.equals("refTasiyici"))
-                    listCellString += "Tasiyici no: " + value + "\n";
+                    listCellStringBuilder.append("Tasiyici no: ").append(value).append("\n");
                 else if (propertyName.equals("durakId")) {
                     if (value.toString().length() > 32)
-                        listCellString += "Durak no: " + value.toString().substring(0, 3) + "\n";
+                        listCellStringBuilder.append("Durak no: ").append(value.toString(), 0, 3).append("\n");
                     else
-                        listCellString += "Durak no: " + value + "\n";
+                        listCellStringBuilder.append("Durak no: ").append(value).append("\n");
                 }
                 else if (propertyName.equals("refGonderi"))
-                    listCellString += "Paket no: " + value + "\n";
+                    listCellStringBuilder.append("Paket no: ").append(value).append("\n");
                 else if (propertyName.equals("teslimat") && Integer.parseInt(value.toString()) == 0)
-                    listCellString += "Teslim ALINACAK" + "\n";
+                    listCellStringBuilder.append("Teslim ALINACAK" + "\n");
                 else if (propertyName.equals("teslimat") && Integer.parseInt(value.toString()) == 1)
-                    listCellString += "Teslim EDILECEK" + "\n";
+                    listCellStringBuilder.append("Teslim EDILECEK" + "\n");
                 else if (propertyName.equals("x") || propertyName.equals("durumX"))
-                    listCellString += "X: " + value + ", ";
+                    listCellStringBuilder.append("X: ").append(value).append(", ");
                 else if (propertyName.equals("y") || propertyName.equals("durumY"))
-                    listCellString += "Y: " + value + "\n";
+                    listCellStringBuilder.append("Y: ").append(value).append("\n");
                 else if (propertyName.equals("baslangicX"))
-                    listCellString += "Baslangic - X:" + value + ", ";
+                    listCellStringBuilder.append("Baslangic - X:").append(value).append(", ");
                 else if (propertyName.equals("baslangicY"))
-                    listCellString += "Y: " + value + "\n";
+                    listCellStringBuilder.append("Y: ").append(value).append("\n");
                 else if (propertyName.equals("bitisX"))
-                    listCellString += "Bitis - X: " + value + ", ";
+                    listCellStringBuilder.append("Bitis - X: ").append(value).append(", ");
                 else if (propertyName.equals("bitisY"))
-                    listCellString += "Y: " + value + "\n";
+                    listCellStringBuilder.append("Y: ").append(value).append("\n");
                 else if (propertyName.equals("gondericiX"))
-                    listCellString += "Gonderici - X: " + value + ", ";
+                    listCellStringBuilder.append("Gonderici - X: ").append(value).append(", ");
                 else if (propertyName.equals("gondericiY"))
-                    listCellString += "Y: " + value + "\n";
+                    listCellStringBuilder.append("Y: ").append(value).append("\n");
                 else if (propertyName.equals("aliciX"))
-                    listCellString += "Alici - X: " + value + ", ";
+                    listCellStringBuilder.append("Alici - X: ").append(value).append(", ");
                 else if (propertyName.equals("aliciY"))
-                    listCellString += "Y: " + value + "\n";
+                    listCellStringBuilder.append("Y: ").append(value).append("\n");
                 else if (propertyName.equals("varisSuresi"))
-                    listCellString += "Varis Suresi: " + value + " dakika\n";
+                    listCellStringBuilder.append("Varis Suresi: ").append(value).append(" dakika\n");
                 else if (propertyName.equals("saatBaslangicAsString"))
-                    listCellString += "Zaman Araligi: " + value + " - ";
+                    listCellStringBuilder.append("Zaman Araligi: ").append(value).append(" - ");
                 else if (propertyName.equals("saatBitisAsString"))
-                    listCellString += value + "\n";
+                    listCellStringBuilder.append(value).append("\n");
             }
+            listCellStringBuilder = new StringBuilder(listCellStringBuilder.toString());
 
             if (index < 0) {
-                listView.getItems().add(new DraggableListItem(o, listCellString));
+                listView.getItems().add(new DraggableListItem(o, listCellStringBuilder.toString()));
             } else {
-                listView.getItems().add(index, new DraggableListItem(o, listCellString));
+                listView.getItems().add(index, new DraggableListItem(o, listCellStringBuilder.toString()));
             }
 
         } catch (IntrospectionException | IllegalAccessException | InvocationTargetException e) {
@@ -1225,7 +1211,7 @@ public class MapScreen implements Initializable {
     }
 
     @FXML
-    public void addTasiyiciXML(ActionEvent e) {
+    public void addTasiyiciXML() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Add Tasiyici XML");
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
@@ -1250,7 +1236,7 @@ public class MapScreen implements Initializable {
     }
 
     @FXML
-    public void addBekleyenPaketXML(ActionEvent e) {
+    public void addBekleyenPaketXML() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Add Bekleyen Paket XML");
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
@@ -1277,7 +1263,7 @@ public class MapScreen implements Initializable {
     }
 
     @FXML
-    public void saveNewVardiya(ActionEvent e) {
+    public void saveNewVardiya() {
         if (isTasiyiciSelected) {
             if (rotaOlanakLabel.getText().contains("Uygulanamaz")) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
