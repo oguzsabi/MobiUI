@@ -139,11 +139,10 @@ public class MapScreen implements Initializable {
         mapScrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         mapScrollPane.addEventFilter(ScrollEvent.ANY, event -> {
+            double sliderVal = zoomSlider.getValue();
             if (event.getDeltaY() > 0) {
-                double sliderVal = zoomSlider.getValue();
                 zoomSlider.setValue(sliderVal + 0.1);
             } else {
-                double sliderVal = zoomSlider.getValue();
                 zoomSlider.setValue(sliderVal + -0.1);
             }
             event.consume();
@@ -524,7 +523,7 @@ public class MapScreen implements Initializable {
             isTasiyiciSelected = false;
             clearEkstraLabels();
 
-            // if other tasiyicilar are hidden when we press butunRotalariGosterGizle then we also make other tasiyicilar visibile
+            // if other tasiyicilar are hidden when we press butunRotalariGosterGizle then we also make other tasiyicilar visible
             digerTasiyicilariGosterGizle.setDisable(true);
             if (digerTasiyicilariGosterGizle.getText().contains("Goster")) {
                 addOtherTasiyicilar();
