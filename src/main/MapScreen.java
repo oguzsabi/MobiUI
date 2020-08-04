@@ -13,12 +13,13 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -100,6 +101,7 @@ public class MapScreen implements Initializable {
     private ListView<DraggableListItem> durakInfo;
     private boolean isTasiyiciSelected;
     private boolean isDurakSelected = false;
+    private boolean firstUpdate = true;
     private Tasiyici selectedTasiyici;
     private DraggableListItem selectedListItem;
 
@@ -1096,7 +1098,6 @@ public class MapScreen implements Initializable {
 
     private void addDurakInfo() {
         try {
-            rotaInfo.scrollTo(rotaInfo.getSelectionModel().getSelectedIndex() - 2);
             rightVBox.getChildren().add(durakInfo);
         } catch (IllegalArgumentException e) {
             durakInfo.getItems().clear();
@@ -1331,26 +1332,24 @@ public class MapScreen implements Initializable {
     }
 
     private class DraggableListCell extends ListCell<DraggableListItem> {
-        String baseStyleString = "-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;";
+//        String baseStyleString = "-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;";
         public DraggableListCell() {
             ListCell thisCell = this;
             selectedListItem = null;
-            setStyle(baseStyleString);
+            setStyle("-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;");
 
             setContentDisplay(ContentDisplay.CENTER);
             setAlignment(Pos.CENTER_LEFT);
 
             setOnDragDetected(event -> {
                 removeLocationMark();
-                if (getItem() == null || event.getButton() == MouseButton.SECONDARY) {
-                    return;
-                }
-
-                if (getItem().getItemObject() instanceof Durak || getItem().getItemObject() instanceof Vardiya) {
-                    setStyle(baseStyleString + "-fx-background-color: #0096C9;");
-                }
-                if (getItem().getItemObject() instanceof Tasiyici || getItem().getItemObject() instanceof Vardiya
-                        || getItem().getItemObject() instanceof Paket) {
+                if (
+                        getItem() == null
+                        || event.getButton() == MouseButton.SECONDARY
+                        || getItem().getItemObject() instanceof Tasiyici
+                        || getItem().getItemObject() instanceof Vardiya
+                        || getItem().getItemObject() instanceof Paket)
+                {
                     return;
                 }
 
@@ -1440,7 +1439,6 @@ public class MapScreen implements Initializable {
 
                             locationMark.setVisible(true);
                             locationMark1.setVisible(false);
-                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Vardiya) {
                             removeDurakInfo();
                             locationMark.setLayoutX(((Vardiya) selectedObject).vardiyaBaslangicLoc.getLayoutX() - xOffset);
@@ -1451,7 +1449,6 @@ public class MapScreen implements Initializable {
 
                             locationMark.setVisible(true);
                             locationMark1.setVisible(true);
-                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Durak) {
                             selectedListItem = getItem();
                             addDurakInfo();
@@ -1460,7 +1457,6 @@ public class MapScreen implements Initializable {
 
                             locationMark.setVisible(true);
                             locationMark1.setVisible(false);
-                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         } else if (selectedObject instanceof Paket) {
                             removeDurakInfo();
                             locationMark.setLayoutX(((Paket) selectedObject).gondericiLoc.getLayoutX() - xOffset);
@@ -1471,30 +1467,16 @@ public class MapScreen implements Initializable {
 
                             locationMark.setVisible(true);
                             locationMark1.setVisible(true);
-                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
-                        } else if (selectedObject instanceof Gonderi) {
-                            setStyle(baseStyleString + "-fx-background-color: #0096C9;");
                         }
 
                         selectedListItem = getItem();
                     } else {
-                        if (getItem().getItemObject() instanceof Gonderi) {
-                            setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
-                        } else {
-                            removeLocationMark();
+                        if (getItem().getItemObject() instanceof Durak) {
                             removeDurakInfo();
-
-                            if (getItem().getItemObject() instanceof Tasiyici) {
-                                setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
-                            } else if (getItem().getItemObject() instanceof Vardiya) {
-                                setStyle(baseStyleString + "-fx-background-color: dimgray; -fx-text-fill: #323232");
-                            } else if (getItem().getItemObject() instanceof Durak) {
-                                setStyle(baseStyleString + "-fx-background-color: darkgray; -fx-text-fill: #323232");
-                            } else if (getItem().getItemObject() instanceof Paket) {
-                                setStyle(baseStyleString + "-fx-background-color: white; -fx-text-fill: #323232");
-                            }
                         }
 
+                        removeLocationMark();
+                        getListView().getSelectionModel().clearSelection();
                         selectedListItem = null;
                     }
                 }
@@ -1556,18 +1538,36 @@ public class MapScreen implements Initializable {
             super.updateItem(item, empty);
 
             if (empty || item == null) {
-                setStyle(baseStyleString);
+//                setStyle(baseStyleString);
                 setText(null);
+                setGraphic(null);
             } else {
-                setText(getListView().getItems().get(getListView().getItems().indexOf(item)).getItemString());
+                Label header = new Label("empty");
 
-                if (item.getItemObject() instanceof Durak) {
-                    setStyle(baseStyleString + "-fx-background-color: darkgray;");
-                } else if (item.getItemObject() instanceof Vardiya){
-                    setStyle(baseStyleString + "-fx-background-color: dimgray;");
-                } else {
-                    setStyle(baseStyleString);
+//                setText(getListView().getItems().get(getListView().getItems().indexOf(item)).getItemString());
+                if (item.getItemObject() instanceof Tasiyici) {
+                    header.setText("TASIYICI");
                 }
+                else if (item.getItemObject() instanceof Durak) {
+                    header.setText("DURAK");
+                    header.setTextFill(Color.GREEN);
+                } else if (item.getItemObject() instanceof Vardiya) {
+                    header.setText("VARDIYA");
+                    header.setTextFill(Color.SIENNA);
+                } else if (item.getItemObject() instanceof Paket) {
+                    header.setText("PAKET");
+//                    setStyle(baseStyleString);
+                } else if (item.getItemObject() instanceof Gonderi) {
+                    header.setText("GONDERI");
+                }
+
+                Pane pane = new Pane();
+                Label label = new Label(getListView().getItems().get(getListView().getItems().indexOf(item)).getItemString());
+                header.setScaleX(1.5);
+                header.setScaleY(1.5);
+                header.setTranslateX(150);
+                pane.getChildren().addAll(label, header);
+                setGraphic(pane);
             }
         }
     }
