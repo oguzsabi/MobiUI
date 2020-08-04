@@ -1565,7 +1565,7 @@ public class MapScreen implements Initializable {
                 Label label = new Label(getListView().getItems().get(getListView().getItems().indexOf(item)).getItemString());
                 header.setScaleX(1.5);
                 header.setScaleY(1.5);
-                header.setTranslateX(150);
+                header.setTranslateX(170);
                 pane.getChildren().addAll(label, header);
                 setGraphic(pane);
             }
