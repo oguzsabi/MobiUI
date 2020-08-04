@@ -77,6 +77,14 @@ public class XMLFormatter {
                 Element vardiyaElement = doc.createElement("vardiya");
                 tasiyiciElement.appendChild(vardiyaElement);
 
+                attr = doc.createAttribute("vardiyaid");
+                attr.setValue(Integer.toString(vardiya.getVardiyaId()));
+                vardiyaElement.setAttributeNode(attr);
+
+                attr = doc.createAttribute("rotaid");
+                attr.setValue(vardiya.getRotaId());
+                vardiyaElement.setAttributeNode(attr);
+
                 attr = doc.createAttribute("saatBaslangic");
                 attr.setValue(vardiya.getSaatBaslangicAsString());
                 vardiyaElement.setAttributeNode(attr);
@@ -101,15 +109,19 @@ public class XMLFormatter {
                 attr.setValue(Double.toString(vardiya.getBitisY()));
                 vardiyaElement.setAttributeNode(attr);
 
+                attr = doc.createAttribute("durakSayisi");
+                attr.setValue(Integer.toString(vardiya.getDurakSayisi()));
+                vardiyaElement.setAttributeNode(attr);
+
                 Element durakElement;
 
                 for (Durak durak: vardiya.getDuraklar()) {
                     durakElement = doc.createElement("durak");
                     vardiyaElement.appendChild(durakElement);
 
-//                    attr = doc.createAttribute("refGonderi");
-//                    attr.setValue(Integer.toString(durak.getRefGonderi()));
-//                    durakElement.setAttributeNode(attr);
+                    attr = doc.createAttribute("durakid");
+                    attr.setValue(durak.getDurakId());
+                    durakElement.setAttributeNode(attr);
 
                     attr = doc.createAttribute("X");
                     attr.setValue(Double.toString(durak.getX()));
@@ -123,15 +135,28 @@ public class XMLFormatter {
                     attr.setValue(Integer.toString(durak.getVarisSuresi()));
                     durakElement.setAttributeNode(attr);
 
-//                    attr = doc.createAttribute("Ucret");
-//                    attr.setValue(Double.toString(durak.getUcret()));
-//                    durakElement.setAttributeNode(attr);
-//
-//                    attr = doc.createAttribute("Teslimat");
-//                    attr.setValue(Integer.toString(durak.getTeslimat()));
-//                    durakElement.setAttributeNode(attr);
+                    attr = doc.createAttribute("gonderiSayisi");
+                    attr.setValue(Integer.toString(durak.getGonderiSayisi()));
+                    durakElement.setAttributeNode(attr);
 
+                    Element gonderiElement;
 
+                    for (Gonderi gonderi: durak.getGonderiler()) {
+                        gonderiElement = doc.createElement("gonderi");
+                        durakElement.appendChild(gonderiElement);
+
+                        attr = doc.createAttribute("refGonderi");
+                        attr.setValue(Integer.toString(gonderi.getRefGonderi()));
+                        gonderiElement.setAttributeNode(attr);
+
+                        attr = doc.createAttribute("Ucret");
+                        attr.setValue(Double.toString(gonderi.getUcret()));
+                        gonderiElement.setAttributeNode(attr);
+
+                        attr = doc.createAttribute("Teslimat");
+                        attr.setValue(Integer.toString(gonderi.getTeslimat()));
+                        gonderiElement.setAttributeNode(attr);
+                    }
                 }
             }
 
@@ -210,6 +235,10 @@ public class XMLFormatter {
 
                    attr = doc.createAttribute("Ucret");
                    attr.setValue(Double.toString(paket.getUcret()));
+                   tasiyiciElement.setAttributeNode(attr);
+
+                   attr = doc.createAttribute("Durum");
+                   attr.setValue(Integer.toString(paket.getDurum()));
                    tasiyiciElement.setAttributeNode(attr);
                }
 

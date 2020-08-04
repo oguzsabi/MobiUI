@@ -472,6 +472,7 @@ public class MapScreen implements Initializable {
         isDurakSelected = !isDurakSelected;
         Shape selectedShape = (Shape) t.getSource();
         Durak durak = (Durak) selectedShape.getUserData();
+        highlightClickedDurakInListView(durak);
         if (isDurakSelected) {
             durak.arrow.setStroke(Color.BLUE);
             durak.arrow.setArrowHeadStroke(Color.BLUE);
@@ -933,6 +934,18 @@ public class MapScreen implements Initializable {
         return arrow;
     }
 
+    private void highlightClickedDurakInListView(Durak durak) {
+        if (isTasiyiciSelected) {
+            for (DraggableListItem item: rotaInfoList) {
+                if (item.getItemObject() instanceof Durak) {
+                    if (item.getItemObject() == durak) {
+                        rotaInfo.getSelectionModel().select(item);
+                    }
+                }
+            }
+        }
+    }
+
     private void changeVardiyaAndDurakOrder() {
         ArrayList<Vardiya> vardiyalar = selectedTasiyici.getVardiyalar();
         boolean vardiyaBitis = true;
@@ -1045,7 +1058,6 @@ public class MapScreen implements Initializable {
         for (int i = startIndex; i < endIndex; i++) {
             DraggableListItem item = rotaInfoList.get(i);
             if (item.getItemObject() instanceof Durak) {
-                System.out.println(((Durak) item.getItemObject()).getDurakId());
                 Durak targetDurak = (Durak) item.getItemObject();
                 for (Gonderi targetGonderi: targetDurak.getGonderiler()) {
                     for (Gonderi selectedGonderi: selectedDurak.getGonderiler()) {
@@ -1155,17 +1167,16 @@ public class MapScreen implements Initializable {
 
             for (PropertyDescriptor propertyDesc : beanInfo.getPropertyDescriptors()) {
                 String propertyName = propertyDesc.getName();
-                Object value;
-                try {
-                     value = propertyDesc.getReadMethod().invoke(o);
-                } catch (NullPointerException e) {
-                    System.err.println("The value of " + propertyName + " was null");
-                    System.err.println("\tThe object was " + o);
-                    return;
-                }
+                Object value = propertyDesc.getReadMethod().invoke(o);
 
                 if (propertyName.equals("refTasiyici"))
                     listCellString += "Tasiyici no: " + value + "\n";
+                else if (propertyName.equals("durakId")) {
+                    if (value.toString().length() > 32)
+                        listCellString += "Durak no: " + value.toString().substring(0, 3) + "\n";
+                    else
+                        listCellString += "Durak no: " + value + "\n";
+                }
                 else if (propertyName.equals("refGonderi"))
                     listCellString += "Paket no: " + value + "\n";
                 else if (propertyName.equals("teslimat") && Integer.parseInt(value.toString()) == 0)
@@ -1251,6 +1262,7 @@ public class MapScreen implements Initializable {
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
         if (file != null) {
             removeOldTasiyiciMarks();
+            tasiyiciInfo.getItems().clear();
             XMLParser.parseTasiyicilar(file);
             markTasiyicilar();
             markAllOtherVardiyalar();
@@ -1275,6 +1287,7 @@ public class MapScreen implements Initializable {
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
         if (file != null) {
             removeOldPaketMarks();
+            paketInfo.getItems().clear();
             XMLParser.parsePaketler(file);
             markBekleyenPaketler();
 //            addedFiles.add(file);
@@ -1317,7 +1330,7 @@ public class MapScreen implements Initializable {
     }
 
     private class DraggableListCell extends ListCell<DraggableListItem> {
-        String baseStyleString = "-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5;";
+        String baseStyleString = "-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;";
         public DraggableListCell() {
             ListCell thisCell = this;
             selectedListItem = null;
