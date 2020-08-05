@@ -197,14 +197,7 @@ public class MapScreen implements Initializable {
             double latY = (maxLat - paket.getGondericiY()) / latitudeDivider;
             double lonX = mapWidth - ((maxLon - paket.getGondericiX()) / longitudeDivider);
 
-            gondericiLoc.setLayoutX(lonX);
-            gondericiLoc.setLayoutY(latY);
-            gondericiLabel.setLayoutX(lonX + paketLabelOffset);
-            gondericiLabel.setLayoutY(latY + paketLabelOffset);
-
-            gondericiLoc.setTranslateX(-gondericiLoc.getWidth()/2);
-            gondericiLoc.setTranslateY(-gondericiLoc.getHeight()/2);
-            mapPane.getChildren().addAll(gondericiLoc, gondericiLabel);
+            setLayout(gondericiLoc, gondericiLabel, latY, lonX);
 
 
             Rectangle aliciLoc = paket.aliciLoc;
@@ -216,17 +209,21 @@ public class MapScreen implements Initializable {
             latY = (maxLat - paket.getAliciY()) / latitudeDivider;
             lonX = mapWidth - ((maxLon - paket.getAliciX()) / longitudeDivider);
 
-            aliciLoc.setLayoutX(lonX);
-            aliciLoc.setLayoutY(latY);
-            aliciLabel.setLayoutX(lonX + paketLabelOffset);
-            aliciLabel.setLayoutY(latY + paketLabelOffset);
-
-            aliciLoc.setTranslateX(-aliciLoc.getWidth()/2);
-            aliciLoc.setTranslateY(-aliciLoc.getHeight()/2);
-            mapPane.getChildren().addAll(aliciLoc, aliciLabel);
+            setLayout(aliciLoc, aliciLabel, latY, lonX);
 
             drawArrow(gondericiLoc, aliciLoc);
         }
+    }
+
+    private void setLayout(Rectangle loc, Label label, double latY, double lonX) {
+        loc.setLayoutX(lonX);
+        loc.setLayoutY(latY);
+        label.setLayoutX(lonX + paketLabelOffset);
+        label.setLayoutY(latY + paketLabelOffset);
+
+        loc.setTranslateX(-loc.getWidth()/2);
+        loc.setTranslateY(-loc.getHeight()/2);
+        mapPane.getChildren().addAll(loc, label);
     }
 
     private void markTasiyicilar() {
@@ -258,36 +255,9 @@ public class MapScreen implements Initializable {
         Color selectedTasiyiciColor = (Color)selectedTasiyici.tasiyiciLoc.getFill();
 
         for (Vardiya vardiya : vardiyalar) {
-            Shape vardiyaBaslangicLoc = vardiya.vardiyaBaslangicLoc;
-            Shape vardiyaBitisLoc = vardiya.vardiyaBitisLoc;
-            vardiyaBaslangicLoc.setFill(selectedTasiyiciColor);
-            vardiyaBitisLoc.setFill(Color.TRANSPARENT);
-            vardiyaBitisLoc.setStroke(selectedTasiyiciColor);
-            vardiyaBitisLoc.setStrokeWidth(2);
-            vardiyaBaslangicLoc.setUserData(vardiya);
-            vardiyaBitisLoc.setUserData(vardiya);
-            vardiyaBaslangicLoc.setOnMouseClicked(vardiyaLocClicked);
-            vardiyaBitisLoc.setOnMouseClicked(vardiyaLocClicked);
-            addedShapes.add(vardiyaBaslangicLoc);
-            addedShapes.add(vardiyaBitisLoc);
-
-            double latY = (maxLat - vardiya.getBaslangicY()) / latitudeDivider;
-            double lonX = mapWidth - ((maxLon - vardiya.getBaslangicX()) / longitudeDivider);
-
-            vardiyaBaslangicLoc.setLayoutX(lonX);
-            vardiyaBaslangicLoc.setLayoutY(latY);
-
-            mapPane.getChildren().remove(vardiyaBaslangicLoc);
-            mapPane.getChildren().add(vardiyaBaslangicLoc);
-
-            latY = (maxLat - vardiya.getBitisY()) / latitudeDivider;
-            lonX = mapWidth - ((maxLon - vardiya.getBitisX()) / longitudeDivider);
-
-            vardiyaBitisLoc.setLayoutX(lonX);
-            vardiyaBitisLoc.setLayoutY(latY);
-
-            mapPane.getChildren().remove(vardiyaBitisLoc);
-            mapPane.getChildren().add(vardiyaBitisLoc);
+            setColor(selectedTasiyiciColor, vardiya);
+            double latY;
+            double lonX;
 
             addToListView(-1, vardiya, rotaInfo);
 
@@ -322,6 +292,39 @@ public class MapScreen implements Initializable {
         drawNewRouteArrows();
     }
 
+    private void setColor(Color selectedTasiyiciColor, Vardiya vardiya) {
+        Shape vardiyaBaslangicLoc = vardiya.vardiyaBaslangicLoc;
+        Shape vardiyaBitisLoc = vardiya.vardiyaBitisLoc;
+        vardiyaBaslangicLoc.setFill(selectedTasiyiciColor);
+        vardiyaBitisLoc.setFill(Color.TRANSPARENT);
+        vardiyaBitisLoc.setStroke(selectedTasiyiciColor);
+        vardiyaBitisLoc.setStrokeWidth(2);
+        vardiyaBaslangicLoc.setUserData(vardiya);
+        vardiyaBitisLoc.setUserData(vardiya);
+        vardiyaBaslangicLoc.setOnMouseClicked(vardiyaLocClicked);
+        vardiyaBitisLoc.setOnMouseClicked(vardiyaLocClicked);
+        addedShapes.add(vardiyaBaslangicLoc);
+        addedShapes.add(vardiyaBitisLoc);
+
+        double latY = (maxLat - vardiya.getBaslangicY()) / latitudeDivider;
+        double lonX = mapWidth - ((maxLon - vardiya.getBaslangicX()) / longitudeDivider);
+
+        vardiyaBaslangicLoc.setLayoutX(lonX);
+        vardiyaBaslangicLoc.setLayoutY(latY);
+
+        mapPane.getChildren().remove(vardiyaBaslangicLoc);
+        mapPane.getChildren().add(vardiyaBaslangicLoc);
+
+        latY = (maxLat - vardiya.getBitisY()) / latitudeDivider;
+        lonX = mapWidth - ((maxLon - vardiya.getBitisX()) / longitudeDivider);
+
+        vardiyaBitisLoc.setLayoutX(lonX);
+        vardiyaBitisLoc.setLayoutY(latY);
+
+        mapPane.getChildren().remove(vardiyaBitisLoc);
+        mapPane.getChildren().add(vardiyaBitisLoc);
+    }
+
     private void markAllOtherVardiyalar() {
         ArrayList<Tasiyici> tasiyicilar = XMLParser.tasiyicilar;
 
@@ -331,36 +334,9 @@ public class MapScreen implements Initializable {
                 Color selectedTasiyiciColor = (Color) tasiyici.tasiyiciLoc.getFill();
 
                 for (Vardiya vardiya : vardiyalar) {
-                    Shape vardiyaBaslangicLoc = vardiya.vardiyaBaslangicLoc;
-                    Shape vardiyaBitisLoc = vardiya.vardiyaBitisLoc;
-                    vardiyaBaslangicLoc.setFill(selectedTasiyiciColor);
-                    vardiyaBitisLoc.setFill(Color.TRANSPARENT);
-                    vardiyaBitisLoc.setStroke(selectedTasiyiciColor);
-                    vardiyaBitisLoc.setStrokeWidth(2);
-                    vardiyaBaslangicLoc.setUserData(vardiya);
-                    vardiyaBitisLoc.setUserData(vardiya);
-                    vardiyaBaslangicLoc.setOnMouseClicked(vardiyaLocClicked);
-                    vardiyaBitisLoc.setOnMouseClicked(vardiyaLocClicked);
-                    addedShapes.add(vardiyaBaslangicLoc);
-                    addedShapes.add(vardiyaBitisLoc);
-
-                    double latY = (maxLat - vardiya.getBaslangicY()) / latitudeDivider;
-                    double lonX = mapWidth - ((maxLon - vardiya.getBaslangicX()) / longitudeDivider);
-
-                    vardiyaBaslangicLoc.setLayoutX(lonX);
-                    vardiyaBaslangicLoc.setLayoutY(latY);
-
-                    mapPane.getChildren().remove(vardiyaBaslangicLoc);
-                    mapPane.getChildren().add(vardiyaBaslangicLoc);
-
-                    latY = (maxLat - vardiya.getBitisY()) / latitudeDivider;
-                    lonX = mapWidth - ((maxLon - vardiya.getBitisX()) / longitudeDivider);
-
-                    vardiyaBitisLoc.setLayoutX(lonX);
-                    vardiyaBitisLoc.setLayoutY(latY);
-
-                    mapPane.getChildren().remove(vardiyaBitisLoc);
-                    mapPane.getChildren().add(vardiyaBitisLoc);
+                    setColor(selectedTasiyiciColor, vardiya);
+                    double latY;
+                    double lonX;
 
                     ArrayList<Durak> duraklar = vardiya.getDuraklar();
 
