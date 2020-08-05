@@ -260,6 +260,7 @@ public class Calculator {
                 }
                 vardiya = (Vardiya) item.getItemObject();
             } else if (item.getItemObject() instanceof Durak) {
+                assert vardiya != null;
                 if (i + 1 == listSize) {
                     totalDuration += calculateDistanceDuration((Durak) item.getItemObject(), vardiya)[1];
                 } else if (i + 1 < listSize) {
