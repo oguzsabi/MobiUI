@@ -42,7 +42,7 @@ public class Calculator {
             "URLA",
             };
 
-    public static double[] calculateDistanceDuration(Tasiyici tasiyici, Vardiya vardiya) {
+    private static double[] calculateDistanceDuration(Tasiyici tasiyici, Vardiya vardiya) {
         double[] distanceDuration = {0, 0};
 
         double tasiyiciLat = tasiyici.getDurumY();
@@ -61,20 +61,7 @@ public class Calculator {
         double secondIlceLat = secondIlce[1];
         double secondIlceLon = secondIlce[2];
 
-        double distance;
-        if (firstIlce[0] != secondIlce[0]) {
-            distance = calculateDistance(tasiyiciLat, tasiyiciLon, firstIlceLat, firstIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-
-            distance = calculateDistance(vardiyaLat, vardiyaLon, secondIlceLat, secondIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        } else {
-            distance = calculateDistance(tasiyiciLat, tasiyiciLon, vardiyaLat, vardiyaLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        }
+        calculate(distanceDuration, tasiyiciLat, tasiyiciLon, firstIlce, firstIlceLat, firstIlceLon, vardiyaLat, vardiyaLon, secondIlce, secondIlceLat, secondIlceLon);
 
         distanceDuration[0] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][0];
         distanceDuration[1] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][1];
@@ -82,7 +69,7 @@ public class Calculator {
         return distanceDuration;
     }
 
-    public static double[] calculateDistanceDuration(Vardiya vardiya, Durak durak2) {
+    private static double[] calculateDistanceDuration(Vardiya vardiya, Durak durak2) {
         double[] distanceDuration = {0, 0};
 
         double vardiyaLat = vardiya.getBaslangicY();
@@ -101,20 +88,7 @@ public class Calculator {
         double secondIlceLat = secondIlce[1];
         double secondIlceLon = secondIlce[2];
 
-        double distance;
-        if (firstIlce[0] != secondIlce[0]) {
-            distance = calculateDistance(vardiyaLat, vardiyaLon, firstIlceLat, firstIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-
-            distance = calculateDistance(durakLat, durakLon, secondIlceLat, secondIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        } else {
-            distance = calculateDistance(vardiyaLat, vardiyaLon, durakLat, durakLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        }
+        calculate(distanceDuration, vardiyaLat, vardiyaLon, firstIlce, firstIlceLat, firstIlceLon, durakLat, durakLon, secondIlce, secondIlceLat, secondIlceLon);
 
         distanceDuration[0] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][0];
         distanceDuration[1] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][1];
@@ -122,7 +96,7 @@ public class Calculator {
         return distanceDuration;
     }
 
-    public static double[] calculateDistanceDuration(Durak durak1, Durak durak2) {
+    private static double[] calculateDistanceDuration(Durak durak1, Durak durak2) {
         double[] distanceDuration = {0, 0};
 
         double firstDurakLat = durak1.getY();
@@ -141,20 +115,7 @@ public class Calculator {
         double secondIlceLat = secondIlce[1];
         double secondIlceLon = secondIlce[2];
 
-        double distance;
-        if (firstIlce[0] != secondIlce[0]) {
-            distance = calculateDistance(firstDurakLat, firstDurakLon, firstIlceLat, firstIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-
-            distance = calculateDistance(secondDurakLat, secondDurakLon, secondIlceLat, secondIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        } else {
-            distance = calculateDistance(firstDurakLat, firstDurakLon, secondDurakLat, secondDurakLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        }
+        calculate(distanceDuration, firstDurakLat, firstDurakLon, firstIlce, firstIlceLat, firstIlceLon, secondDurakLat, secondDurakLon, secondIlce, secondIlceLat, secondIlceLon);
 
         distanceDuration[0] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][0];
         distanceDuration[1] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][1];
@@ -163,7 +124,7 @@ public class Calculator {
         return distanceDuration;
     }
 
-    public static double[] calculateDistanceDuration(Durak durak1, Vardiya vardiya) {
+    private static double[] calculateDistanceDuration(Durak durak1, Vardiya vardiya) {
         double[] distanceDuration = {0, 0};
 
         double durakLat = durak1.getY();
@@ -182,21 +143,7 @@ public class Calculator {
         double secondIlceLat = secondIlce[1];
         double secondIlceLon = secondIlce[2];
 
-        double distance;
-
-        if (firstIlce[0] != secondIlce[0]) {
-            distance = calculateDistance(durakLat, durakLon, firstIlceLat, firstIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-
-            distance = calculateDistance(vardiyaLat, vardiyaLon, secondIlceLat, secondIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        } else {
-            distance = calculateDistance(durakLat, durakLon, vardiyaLat, vardiyaLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        }
+        calculate(distanceDuration, durakLat, durakLon, firstIlce, firstIlceLat, firstIlceLon, vardiyaLat, vardiyaLon, secondIlce, secondIlceLat, secondIlceLon);
 
         distanceDuration[0] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][0];
         distanceDuration[1] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][1];
@@ -204,7 +151,7 @@ public class Calculator {
         return distanceDuration;
     }
 
-    public static double[] calculateDistanceDuration(Vardiya vardiya1, Vardiya vardiya2) {
+    private static double[] calculateDistanceDuration(Vardiya vardiya1, Vardiya vardiya2) {
         double[] distanceDuration = {0, 0};
 
         double firstVardiyaLat = vardiya1.getBitisY();
@@ -223,21 +170,7 @@ public class Calculator {
         double secondIlceLat = secondIlce[1];
         double secondIlceLon = secondIlce[2];
 
-        double distance;
-
-        if (firstIlce[0] != secondIlce[0]) {
-            distance = calculateDistance(firstVardiyaLat, firstVardiyaLon, firstIlceLat, firstIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-
-            distance = calculateDistance(secondVardiyaLat, secondVardiyaLon, secondIlceLat, secondIlceLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        } else {
-            distance = calculateDistance(firstVardiyaLat, firstVardiyaLon, secondVardiyaLat, secondVardiyaLon);
-            distanceDuration[0] += distance;
-            distanceDuration[1] += calculateDuration(distance);
-        }
+        calculate(distanceDuration, firstVardiyaLat, firstVardiyaLon, firstIlce, firstIlceLat, firstIlceLon, secondVardiyaLat, secondVardiyaLon, secondIlce, secondIlceLat, secondIlceLon);
 
         distanceDuration[0] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][0];
         distanceDuration[1] += CSVReader.distanceDurationMatrix[(int)firstIlce[0]][(int)secondIlce[0]][1];
@@ -245,7 +178,24 @@ public class Calculator {
         return distanceDuration;
     }
 
-    public static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+    private static void calculate(double[] distanceDuration, double firstLat, double firstLon, double[] firstIlce, double firstIlceLat, double firstIlceLon, double secondLat, double secondLon, double[] secondIlce, double secondIlceLat, double secondIlceLon) {
+        double distance;
+        if (firstIlce[0] != secondIlce[0]) {
+            distance = calculateDistance(firstLat, firstLon, firstIlceLat, firstIlceLon);
+            distanceDuration[0] += distance;
+            distanceDuration[1] += calculateDuration(distance);
+
+            distance = calculateDistance(secondLat, secondLon, secondIlceLat, secondIlceLon);
+            distanceDuration[0] += distance;
+            distanceDuration[1] += calculateDuration(distance);
+        } else {
+            distance = calculateDistance(firstLat, firstLon, secondLat, secondLon);
+            distanceDuration[0] += distance;
+            distanceDuration[1] += calculateDuration(distance);
+        }
+    }
+
+    private static double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         double latDistance = toRad(lat2-lat1);
         double lonDistance = toRad(lon2-lon1);
         double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) +
@@ -291,7 +241,7 @@ public class Calculator {
         return totalDistanceDuration;
     }
 
-    public static double calculateTasiyiciTotalDuration(ObservableList<DraggableListItem> observableList) {
+    private static double calculateTasiyiciTotalDuration(ObservableList<DraggableListItem> observableList) {
         double totalDuration = 0;
         int listSize = observableList.size();
         Vardiya vardiya = null;
@@ -366,7 +316,7 @@ public class Calculator {
         return new int[]{firstDurakIndex, secondDurakIndex};
     }
 
-    public static int calculateDuration(double distance) {
+    private static int calculateDuration(double distance) {
         return (int) Math.round((distance / speed) * 60);
     }
 
@@ -401,7 +351,7 @@ public class Calculator {
                 };
     }
 
-    public static double toRad(double value) {
+    private static double toRad(double value) {
         return value * Math.PI / 180;
     }
 }
