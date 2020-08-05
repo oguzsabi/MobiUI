@@ -945,15 +945,19 @@ public class MapScreen implements Initializable {
             changeVardiyaAndDurakOrder();
             updateVarisSureleri();
             if (isRouteFeasible()) {
-                rotaInfoList.remove(i);
-                rotaInfoList.remove(i);
+                removeItemInList(rotaInfoList, i);
+                removeItemInList(rotaInfoList, i);
                 return i;
             }
-            rotaInfoList.remove(i);
-            rotaInfoList.remove(i);
+            removeItemInList(rotaInfoList, i);
+            removeItemInList(rotaInfoList, i);
         }
 
         return rotaInfoList.size();
+    }
+
+    private void removeItemInList(ObservableList<DraggableListItem> observableList, int index) {
+        observableList.remove(index);
     }
 
     private boolean isRouteFeasible() {
@@ -1261,7 +1265,7 @@ public class MapScreen implements Initializable {
 
     private class DraggableListCell extends ListCell<DraggableListItem> {
         public DraggableListCell() {
-            ListCell thisCell = this;
+            DraggableListCell thisCell = this;
             selectedListItem = null;
             setStyle("-fx-border-width: 0.5; -fx-border-color: lightgray; -fx-padding: 5; -fx-highlight-fill: #0096C9;");
 
