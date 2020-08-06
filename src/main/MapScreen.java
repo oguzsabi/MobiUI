@@ -92,7 +92,6 @@ public class MapScreen implements Initializable {
     // rotaLines keeps the new rota lines for the selected tasiyici
     private final ArrayList<Arrow> rotaLines = new ArrayList<>();
     // addedFiles keeps the added files so that they won't be added again
-//    private final ArrayList<File> addedFiles = new ArrayList<>();
     private final ArrayList<Paket> convertedPaketler = new ArrayList<>();
     private final ArrayList<Durak[]> duraklarFromPaketler = new ArrayList<>();
     private ObservableList<DraggableListItem> rotaInfoList;
@@ -406,7 +405,6 @@ public class MapScreen implements Initializable {
 
         if (isTasiyiciSelected) {
             if (isShapeNotSelectedBefore(selectedShape)) {
-//                selectedShapes.add((Shape)t.getSource());
                 vardiyaKaydet.setDisable(false);
                 convertPaketToDuraklar(paket);
                 drawNewRouteArrows();
@@ -1024,15 +1022,6 @@ public class MapScreen implements Initializable {
         return true;
     }
 
-//    private boolean isFileNotAddedBefore(File file) {
-//        for (File addedFile: addedFiles) {
-//            if (addedFile.equals(file)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-
     private void addDurakInfo() {
         try {
             rightVBox.getChildren().add(durakInfo);
@@ -1178,8 +1167,6 @@ public class MapScreen implements Initializable {
         removeRotaArrows();
         addedShapes.clear();
         addedLabels.clear();
-//        removeAddedShapes();
-//        removeAddedLabels();
     }
 
     @FXML
@@ -1200,18 +1187,10 @@ public class MapScreen implements Initializable {
             XMLParser.parseTasiyicilar(file);
             markTasiyicilar();
             markAllOtherVardiyalar();
-//            addedFiles.add(file);
             butunRotalariGosterGizle.setDisable(false);
             tasiyiciInfo.getItems().clear();
             addToTasiyiciInfo();
         }
-//        if (file != null && isFileNotAddedBefore(file)) {
-//            XMLParser.parseTasiyicilar(file);
-//            markTasiyicilar();
-//            markAllOtherVardiyalar();
-//            addedFiles.add(file);
-//            butunRotalariGosterGizle.setDisable(false);
-//        }
     }
 
     @FXML
@@ -1224,21 +1203,12 @@ public class MapScreen implements Initializable {
             paketInfo.getItems().clear();
             XMLParser.parsePaketler(file);
             markBekleyenPaketler();
-//            addedFiles.add(file);
             bosPaketGosterGizle.setDisable(false);
             bosPaketGosterGizle.setText("Bos Paketleri Gizle");
             bosPaketGosterGizle.setOnAction(hideEmptyPakets);
             paketInfo.getItems().clear();
             addToPaketInfo();
         }
-//        if (file != null && isFileNotAddedBefore(file)) {
-//            XMLParser.parsePaketler(file);
-//            markBekleyenPaketler();
-//            addedFiles.add(file);
-//            bosPaketGosterGizle.setDisable(false);
-//            bosPaketGosterGizle.setText("Bos Paketleri Gizle");
-//            bosPaketGosterGizle.setOnAction(hideEmptyPakets);
-//        }
     }
 
     @FXML
