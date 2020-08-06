@@ -1,10 +1,9 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,8 +32,10 @@ public class Test {
 //
 //        time = hour + ":" + minutes;
 //        System.out.println("Second as time: " + time);
+//
+//        UUID uuid = UUID.randomUUID();
+//        System.out.println(uuid.toString());
 
-        UUID uuid = UUID.randomUUID();
-        System.out.println(uuid.toString());
+
     }
 }

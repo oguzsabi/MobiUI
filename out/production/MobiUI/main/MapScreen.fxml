@@ -19,14 +19,21 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
+                  <MenuItem mnemonicParsing="false" onAction="#addFromAPI" text="API'dan Ekle" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#addTasiyiciXML" text="Tasiyici XML Ekle" />
                   <MenuItem mnemonicParsing="false" onAction="#addBekleyenPaketXML" text="Bekleyen Paket XML Ekle" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
               <MenuItem mnemonicParsing="false" text="Close" />
             </items>
           </Menu>
             <Menu mnemonicParsing="false" text="Options">
                <items>
                   <CheckMenuItem fx:id="optimalPaketEkleme" mnemonicParsing="false" text="Optimal Paket Ekleme" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <RadioMenuItem fx:id="productionAPI" mnemonicParsing="false" text="API Production" />
+                  <RadioMenuItem fx:id="testAPI" mnemonicParsing="false" selected="true" text="API Test" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Close" />
                </items>
             </Menu>
@@ -37,6 +44,7 @@
                         <Circle radius="6.0" stroke="TRANSPARENT" strokeType="INSIDE" strokeWidth="0.0" />
                      </graphic>
                   </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Paket Baslangic (Durak)">
                      <graphic>
                         <Rectangle arcHeight="5.0" arcWidth="5.0" height="10.0" stroke="TRANSPARENT" strokeType="INSIDE" width="10.0" />
@@ -47,6 +55,7 @@
                         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="10.0" stroke="BLACK" strokeType="INSIDE" width="10.0" />
                      </graphic>
                   </MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" text="Vardiya Baslangic">
                      <graphic>
                         <Pane nodeOrientation="LEFT_TO_RIGHT" prefHeight="1.0" prefWidth="1.0">

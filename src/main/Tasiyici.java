@@ -10,6 +10,7 @@ public class Tasiyici {
     private double durumX;
     private double durumY;
     private int durumSaat;
+    private String durumTarih;
     private double kmBeklenti;
     private int dkBeklenti;
     private int ratingSayisi;
@@ -30,7 +31,8 @@ public class Tasiyici {
         this.refTasiyici = refTasiyici;
         this.durumX = durumX;
         this.durumY = durumY;
-        this.durumSaat = stringTimeToIntegerSeconds(durumSaat);
+        this.durumTarih = durumSaat.split(" ")[0];
+        this.durumSaat = stringTimeToIntegerSeconds(durumSaat.split(" ")[1]);
         this.kmBeklenti = kmBeklenti;
         this.dkBeklenti = dkBeklenti;
         this.ratingSayisi = ratingSayisi;

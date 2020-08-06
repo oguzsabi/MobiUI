@@ -49,6 +49,8 @@ public class MapScreen implements Initializable {
     @FXML ImageView locationMark;
     @FXML ImageView locationMark1;
     @FXML CheckMenuItem optimalPaketEkleme;
+    @FXML RadioMenuItem productionAPI;
+    @FXML RadioMenuItem testAPI;
     private Group zoomGroup;
 
     // Constants
@@ -116,6 +118,10 @@ public class MapScreen implements Initializable {
         locationMark1.setFitWidth(60);
         locationMark1.setFitHeight(60);
         locationMark1.setOnMouseClicked(locationMarkClicked);
+
+        ToggleGroup apiOptionToggleGroup = new ToggleGroup();
+        productionAPI.setToggleGroup(apiOptionToggleGroup);
+        testAPI.setToggleGroup(apiOptionToggleGroup);
 
         rotaInfoList = rotaInfo.getItems();
         rotaInfo.setCellFactory(param -> new DraggableListCell());
@@ -1145,6 +1151,25 @@ public class MapScreen implements Initializable {
         }
     }
 
+    private void addNewTasiyici() {
+        tasiyiciInfo.getItems().clear();
+        markTasiyicilar();
+        markAllOtherVardiyalar();
+        butunRotalariGosterGizle.setDisable(false);
+        tasiyiciInfo.getItems().clear();
+        addToTasiyiciInfo();
+    }
+
+    private void addNewGonderi() {
+        paketInfo.getItems().clear();
+        markBekleyenPaketler();
+        bosPaketGosterGizle.setDisable(false);
+        bosPaketGosterGizle.setText("Bos Paketleri Gizle");
+        bosPaketGosterGizle.setOnAction(hideEmptyPakets);
+        paketInfo.getItems().clear();
+        addToPaketInfo();
+    }
+
     private void returnToDefaultState() {
         isTasiyiciSelected = false;
         selectedTasiyici = null;
@@ -1183,13 +1208,8 @@ public class MapScreen implements Initializable {
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
         if (file != null) {
             removeOldTasiyiciMarks();
-            tasiyiciInfo.getItems().clear();
-            XMLParser.parseTasiyicilar(file);
-            markTasiyicilar();
-            markAllOtherVardiyalar();
-            butunRotalariGosterGizle.setDisable(false);
-            tasiyiciInfo.getItems().clear();
-            addToTasiyiciInfo();
+            XMLParser.parseTasiyicilar(file, null);
+            addNewTasiyici();
         }
     }
 
@@ -1200,15 +1220,18 @@ public class MapScreen implements Initializable {
         File file = fileChooser.showOpenDialog(wrapperLayout.getScene().getWindow());
         if (file != null) {
             removeOldPaketMarks();
-            paketInfo.getItems().clear();
-            XMLParser.parsePaketler(file);
-            markBekleyenPaketler();
-            bosPaketGosterGizle.setDisable(false);
-            bosPaketGosterGizle.setText("Bos Paketleri Gizle");
-            bosPaketGosterGizle.setOnAction(hideEmptyPakets);
-            paketInfo.getItems().clear();
-            addToPaketInfo();
+            XMLParser.parsePaketler(file, null);
+            addNewGonderi();
         }
+    }
+
+    @FXML
+    public void addFromAPI() {
+        removeOldPaketMarks();
+        removeOldTasiyiciMarks();
+        XMLParser.parseFromAPI(productionAPI.isSelected());
+        addNewTasiyici();
+        addNewGonderi();
     }
 
     @FXML

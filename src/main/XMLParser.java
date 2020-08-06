@@ -4,24 +4,32 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class XMLParser {
     public static ArrayList<Paket> paketler = new ArrayList<>();
     public static ArrayList<Tasiyici> tasiyicilar = new ArrayList<>();
 
-    public static void parsePaketler(File file) {
+    public static void parsePaketler(File file, String gonderiler) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(file);
+            Document document;
+            if (file == null) {
+                InputSource inputSource = new InputSource(new StringReader(gonderiler));
+                document = builder.parse(inputSource);
+            } else {
+                document = builder.parse(file);
+            }
             document.getDocumentElement().normalize();
 
             NodeList nodeList = document.getElementsByTagName("gonderi");
@@ -32,32 +40,38 @@ public class XMLParser {
                 if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
                     int refGonderi = Integer.parseInt(element.getAttribute("refGonderi"));
-                    double gondericiX = Double.parseDouble(element.getAttribute("GondericiX"));
-                    double gondericiY = Double.parseDouble(element.getAttribute("GondericiY"));
-                    double aliciX = Double.parseDouble(element.getAttribute("AliciX"));
-                    double aliciY = Double.parseDouble(element.getAttribute("AliciY"));
-                    double ucret = Double.parseDouble(element.getAttribute("Ucret"));
-                    int durum = Integer.parseInt(element.getAttribute("Durum"));
+//                    double gondericiX = Double.parseDouble(element.getAttribute("gondericiX"));
+//                    double gondericiY = Double.parseDouble(element.getAttribute("gondericiY"));
+//                    double aliciX = Double.parseDouble(element.getAttribute("aliciX"));
+//                    double aliciY = Double.parseDouble(element.getAttribute("aliciY"));
+                    double gondericiX = Double.parseDouble(element.getAttribute("gondericiY"));
+                    double gondericiY = Double.parseDouble(element.getAttribute("gondericiX"));
+                    double aliciX = Double.parseDouble(element.getAttribute("aliciY"));
+                    double aliciY = Double.parseDouble(element.getAttribute("aliciX"));
+                    double ucret = Double.parseDouble(element.getAttribute("ucret"));
+                    int durum = Integer.parseInt(element.getAttribute("durum"));
 
                     paketler.add(new Paket(refGonderi, gondericiX, gondericiY, aliciX, aliciY, ucret, durum));
                 }
             }
 
 
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
     }
 
-    public static void parseTasiyicilar(File file) {
+    public static void parseTasiyicilar(File file, String tasiyici) {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(file);
+            Document document;
+            if (file == null) {
+                InputSource inputSource = new InputSource(new StringReader(tasiyici));
+                document = builder.parse(inputSource);
+            } else {
+                document = builder.parse(file);
+            }
             document.getDocumentElement().normalize();
 
             NodeList tasiyiciList = document.getElementsByTagName("tasiyici");
@@ -94,8 +108,8 @@ public class XMLParser {
                                             Element gonderiElement = (Element) gonderiNode;
 
                                             int refGonderi = Integer.parseInt(gonderiElement.getAttribute("refGonderi"));
-                                            double ucret = Double.parseDouble(gonderiElement.getAttribute("Ucret"));
-                                            int teslimat = Integer.parseInt(gonderiElement.getAttribute("Teslimat"));
+                                            double ucret = Double.parseDouble(gonderiElement.getAttribute("ucret"));
+                                            int teslimat = Integer.parseInt(gonderiElement.getAttribute("teslimat"));
 
                                             gonderilerTemp.add(new Gonderi(refGonderi, ucret, teslimat));
                                         }
@@ -103,8 +117,10 @@ public class XMLParser {
 
                                     String durakId = durakElement.getAttribute("durakid");
                                     int gonderiSayisi = Integer.parseInt(durakElement.getAttribute("gonderiSayisi"));
-                                    double X = Double.parseDouble(durakElement.getAttribute("X"));
-                                    double Y = Double.parseDouble(durakElement.getAttribute("Y"));
+//                                    double X = Double.parseDouble(durakElement.getAttribute("X"));
+//                                    double Y = Double.parseDouble(durakElement.getAttribute("Y"));
+                                    double X = Double.parseDouble(durakElement.getAttribute("Y"));
+                                    double Y = Double.parseDouble(durakElement.getAttribute("X"));
                                     int varisSuresi = Integer.parseInt(durakElement.getAttribute("varisSuresi"));
 
                                     duraklarTemp.add(new Durak(durakId, gonderiSayisi, X, Y, varisSuresi, gonderilerTemp));
@@ -116,10 +132,14 @@ public class XMLParser {
                             int durakSayisi = Integer.parseInt(vardiyaElement.getAttribute("durakSayisi"));
                             String saatBaslangic = vardiyaElement.getAttribute("saatBaslangic");
                             String saatBitis = vardiyaElement.getAttribute("saatBitis");
-                            double baslangicX = Double.parseDouble(vardiyaElement.getAttribute("BaslangicX"));
-                            double baslangicY = Double.parseDouble(vardiyaElement.getAttribute("BaslangicY"));
-                            double bitisX = Double.parseDouble(vardiyaElement.getAttribute("BitisX"));
-                            double bitisY = Double.parseDouble(vardiyaElement.getAttribute("BitisY"));
+//                            double baslangicX = Double.parseDouble(vardiyaElement.getAttribute("baslangicX"));
+//                            double baslangicY = Double.parseDouble(vardiyaElement.getAttribute("baslangicY"));
+//                            double bitisX = Double.parseDouble(vardiyaElement.getAttribute("bitisX"));
+//                            double bitisY = Double.parseDouble(vardiyaElement.getAttribute("bitisY"));
+                            double baslangicX = Double.parseDouble(vardiyaElement.getAttribute("baslangicY"));
+                            double baslangicY = Double.parseDouble(vardiyaElement.getAttribute("baslangicX"));
+                            double bitisX = Double.parseDouble(vardiyaElement.getAttribute("bitisY"));
+                            double bitisY = Double.parseDouble(vardiyaElement.getAttribute("bitisX"));
 
                             vardiyalarTemp.add(new Vardiya(
                                     vardiyaId,
@@ -136,12 +156,24 @@ public class XMLParser {
                         }
                     }
 
+                    double durumX;
+                    double durumY;
+                    double kmBeklenti;
+                    int dkBeklenti;
                     int refTasiyici = Integer.parseInt(tasiyiciElement.getAttribute("refTasiyici"));
-                    double durumX = Double.parseDouble(tasiyiciElement.getAttribute("DurumX"));
-                    double durumY = Double.parseDouble(tasiyiciElement.getAttribute("DurumY"));
-                    String durumSaat = tasiyiciElement.getAttribute("DurumSaat");
-                    double kmBeklenti = Double.parseDouble(tasiyiciElement.getAttribute("kmBeklenti"));
-                    int dkBeklenti = Integer.parseInt(tasiyiciElement.getAttribute("dkBeklenti"));
+                    try {
+                        durumX = Double.parseDouble(tasiyiciElement.getAttribute("durumX"));
+                        durumY = Double.parseDouble(tasiyiciElement.getAttribute("durumY"));
+                        kmBeklenti = Double.parseDouble(tasiyiciElement.getAttribute("beklentiKM"));
+                        dkBeklenti = Integer.parseInt(tasiyiciElement.getAttribute("beklentiDK"));
+                    } catch (NumberFormatException e) {
+                        durumX = ThreadLocalRandom.current().nextDouble(26.894599, 27.280999);
+                        durumY = ThreadLocalRandom.current().nextDouble(38.307100, 38.618600);
+                        kmBeklenti = 10;
+                        dkBeklenti = 10;
+                    }
+                    String durumSaat = tasiyiciElement.getAttribute("durumSaat");
+
                     int ratingSayisi = Integer.parseInt(tasiyiciElement.getAttribute("ratingSayisi"));
                     int ratingToplam = Integer.parseInt(tasiyiciElement.getAttribute("ratingToplam"));
                     int vardiyaSayisi = Integer.parseInt(tasiyiciElement.getAttribute("vardiyaSayisi"));
@@ -151,10 +183,46 @@ public class XMLParser {
             }
 
 
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        }
+    }
+
+    public static void parseFromAPI(boolean fromProduction) {
+        URL url;
+        try {
+            if (fromProduction) {
+                url = new URL("https://auto.mobikargo.com/MobiKargo/OptimizasyonGetir?ApiKey=353CC7DBD83745FEB9EFC27D978AA20253608966614546B48440F712A2B69F89");
+            } else {
+                url = new URL("https://webapi.mobikargo.com/MobiKargo/OptimizasyonGetir?ApiKey=353CC7DBD83745FEB9EFC27D978AA20253608966614546B48440F712A2B69F89");
+            }
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(url.openStream()));
+
+            String result = "";
+            StringBuilder stringBuilder = new StringBuilder(result);
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
+                stringBuilder.append(inputLine);
+            in.close();
+
+            result = stringBuilder.toString();
+            String tasiyici = result.split("\"Tasiyicilar\":")[1];
+            String gonderiler = tasiyici.split(",")[1];
+
+            gonderiler = gonderiler.substring(14, gonderiler.length() - 3);
+            gonderiler = gonderiler.replace("\\u003c", "<");
+            gonderiler = gonderiler.replace("\\u003e", ">");
+            gonderiler = gonderiler.replace("\\", "");
+
+            tasiyici = tasiyici.split(",")[0];
+            tasiyici = tasiyici.replace("\\u003c", "<");
+            tasiyici = tasiyici.replace("\\u003e", ">");
+            tasiyici = tasiyici.replace("\\", "");
+            tasiyici = tasiyici.substring(1, tasiyici.length() - 1);
+
+            parseTasiyicilar(null, tasiyici);
+            parsePaketler(null, gonderiler);
         } catch (IOException e) {
             e.printStackTrace();
         }
